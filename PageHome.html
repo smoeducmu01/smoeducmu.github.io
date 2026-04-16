@@ -1,0 +1,457 @@
+<div id="page-home" class="card active">
+      <style>
+        /* ══════════════════════════════════════
+           HOME PAGE — ITPC Layout (steel blue)
+           ══════════════════════════════════════ */
+        #page-home { padding: 0 !important; background: #e8f3f8; }
+
+        /* ── 1. HERO ZONE: slideshow left + calendar right ── */
+        .hp-hero {
+          display: grid;
+          grid-template-columns: 1fr 280px;
+          gap: 0;
+          background: white;
+          border-bottom: 1px solid #cce2ef;
+          width: 100%;
+          overflow: hidden;
+        }
+        @media(max-width:900px){ .hp-hero { grid-template-columns: 1fr; } }
+
+        /* Slideshow — aspect ratio driven, no fixed height */
+        .hp-slide-col {
+          position: relative;
+          overflow: hidden;
+          background: #1e4460;
+          min-width: 0;
+          aspect-ratio: 16 / 6;
+        }
+        #homeSlideshow {
+          position: absolute !important;
+          inset: 0;
+          width: 100% !important;
+          height: 100% !important;
+          border-radius: 0 !important;
+          min-height: unset !important;
+        }
+        @media(max-width:900px){
+          .hp-slide-col { aspect-ratio: 16 / 7; }
+        }
+        @media(max-width:640px){
+          .hp-slide-col { aspect-ratio: 16 / 9; }
+        }
+
+        /* Calendar column */
+        .hp-cal-col {
+          border-left: 1px solid #cce2ef;
+          display: flex;
+          flex-direction: column;
+          background: white;
+        }
+        @media(max-width:900px){ .hp-cal-col { border-left: none; border-top: 1px solid #cce2ef; } }
+        .hp-cal-head {
+          background: linear-gradient(90deg, #1e4460, #2a6496);
+          color: white;
+          padding: 11px 16px;
+          font-weight: 700;
+          font-size: 0.85em;
+          display: flex; align-items: center; gap: 8px;
+        }
+        .hp-cal-body { padding: 12px; flex: 1; }
+        .hp-cal-nav-row {
+          display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+        }
+        .hp-cal-month { font-weight: 700; font-size: 0.85em; color: #1e4460; }
+        .hp-cal-btn {
+          background: none; border: 1px solid #b0d4e8; border-radius: 6px;
+          width: 27px; height: 27px; cursor: pointer; color: #2a6496;
+          font-size: 1em; font-family: inherit;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .hp-cal-btn:hover { background: #eef5f9; }
+        .hp-cal-grid {
+          display: grid; grid-template-columns: repeat(7,1fr); gap: 1px; font-size: 0.73em;
+        }
+        .hp-cal-grid .hd { text-align: center; font-weight: 700; color: #5ba3cc; padding: 3px 0; }
+        .hp-cal-grid .dc {
+          text-align: center; padding: 5px 1px; border-radius: 4px;
+          color: #1e4460; line-height: 1; cursor: default;
+        }
+        .hp-cal-grid .dc.td { background: #2a6496; color: white; font-weight: 700; border-radius: 50%; }
+        .hp-cal-grid .dc.om { color: #c5dde8; }
+        .hp-cal-grid .dc.ev { background: #eef5f9; font-weight: 700; color: #2a6496; }
+        .hp-cal-events { padding: 0 12px 12px; border-top: 1px solid #eef5f9; margin-top: 4px; }
+        .hp-cal-events-title { font-size: 0.68em; font-weight: 700; color: #5ba3cc; text-transform: uppercase; letter-spacing: 0.08em; margin: 8px 0 6px; }
+        .hp-cal-ev-item { display: flex; gap: 7px; font-size: 0.75em; margin-bottom: 7px; align-items: flex-start; }
+        .hp-cal-ev-dot { width: 7px; height: 7px; border-radius: 50%; background: #3d88b8; flex-shrink: 0; margin-top: 4px; }
+        .hp-cal-ev-text { color: #1e4460; line-height: 1.4; }
+
+        /* ── 2. QUICK LINKS STRIP ── */
+        .hp-quick {
+          background: linear-gradient(90deg, #1e4460 0%, #2a6496 50%, #3d88b8 100%);
+          padding: 0;
+        }
+        .hp-quick-inner {
+          max-width: 1240px; margin: 0 auto;
+          display: grid; grid-template-columns: repeat(3, 1fr);
+        }
+        @media(max-width:640px){ .hp-quick-inner { grid-template-columns: 1fr; } }
+        .hp-quick-item {
+          display: flex; align-items: center; gap: 16px;
+          padding: 18px 28px;
+          border-right: 1px solid rgba(255,255,255,0.12);
+          cursor: pointer; transition: background 0.15s;
+          text-decoration: none;
+        }
+        .hp-quick-item:last-child { border-right: none; }
+        .hp-quick-item:hover { background: rgba(255,255,255,0.1); }
+        .hp-quick-ico {
+          width: 54px; height: 54px; border-radius: 50%;
+          background: rgba(255,255,255,0.15);
+          border: 2px solid rgba(255,255,255,0.3);
+          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .hp-quick-ico svg { stroke: white; }
+        .hp-quick-label { font-weight: 700; font-size: 0.9em; color: white; }
+        .hp-quick-desc { font-size: 0.75em; color: rgba(255,255,255,0.72); margin-top: 2px; }
+        @media(max-width:768px){
+          .hp-quick-item { padding: 14px 18px; gap: 12px; }
+          .hp-quick-ico { width: 44px; height: 44px; }
+        }
+
+        /* ── 3. CONTENT ZONE ── */
+        .hp-content {
+          max-width: 1240px; margin: 0 auto;
+          padding: 24px 28px;
+          display: grid;
+          grid-template-columns: 1fr 420px;
+          gap: 24px;
+          align-items: start;
+        }
+        @media(max-width:960px){ .hp-content { grid-template-columns: 1fr; } }
+        @media(max-width:768px){ .hp-content { padding: 16px 14px; gap: 16px; } }
+
+        /* ── News section ── */
+        .hp-news-section {
+          background: white;
+          border-radius: 16px;
+          padding: 22px 24px;
+          border: 1px solid #cce4f0;
+          box-shadow: 0 3px 18px rgba(42,100,150,0.09);
+        }
+        .hp-section-head {
+          font-size: 1em; font-weight: 800; color: #1e4460;
+          display: flex; align-items: center; gap: 10px;
+          padding: 0 0 14px; margin-bottom: 14px;
+          border-bottom: 2px solid #ddeef7;
+        }
+        .hp-section-head::before {
+          content: ''; width: 5px; height: 22px;
+          background: linear-gradient(180deg,#5ba3cc,#1e4460);
+          border-radius: 3px; flex-shrink: 0;
+        }
+        .hp-news-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+        .hp-ntab {
+          padding: 5px 16px; border-radius: 20px;
+          border: 1.5px solid #b0d4e8;
+          background: white; color: #5ba3cc;
+          font-size: 0.8em; font-weight: 600;
+          cursor: pointer; font-family: inherit; transition: 0.15s;
+        }
+        .hp-ntab::before { content: "● "; }
+        .hp-ntab.active { background: #2a6496; color: white; border-color: #2a6496; }
+
+        /* News: single full-width card */
+        .hp-news-grid { display: block; }
+
+        .hp-ncard {
+          background: white; border-radius: 10px; border: 1px solid #cce2ef;
+          overflow: hidden; cursor: pointer;
+          transition: box-shadow 0.18s, transform 0.18s;
+        }
+        .hp-ncard:hover { box-shadow: 0 6px 20px rgba(42,100,150,0.14); transform: translateY(-2px); }
+        .hp-ncard-thumb {
+          aspect-ratio: 16/9; overflow: hidden;
+          background: linear-gradient(135deg,#1e4460,#3d88b8);
+          display: flex; align-items: center; justify-content: center;
+        }
+        .hp-ncard-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+        .hp-ncard-thumb iframe { width:100%; height:100%; border:none; display:block; }
+        .hp-ncard-body { padding: 12px 14px 14px; }
+        .hp-ncard-meta { font-size: 0.7em; color: #5ba3cc; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+        .hp-ncard-title {
+          font-size: 0.85em; font-weight: 700; color: #1e4460; line-height: 1.45;
+          display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .hp-ncard.feat .hp-ncard-title { font-size: 0.92em; -webkit-line-clamp: 4; }
+        .hp-ncard-read { display: inline-block; margin-top: 8px; font-size: 0.77em; font-weight: 700; color: #2a6496; }
+
+        /* Side cards stacked */
+        .hp-side-stack { display: flex; flex-direction: column; gap: 10px; }
+        .hp-scard {
+          background: white; border-radius: 8px; border: 1px solid #cce2ef;
+          display: flex; overflow: hidden; cursor: pointer;
+          transition: box-shadow 0.15s;
+        }
+        .hp-scard:hover { box-shadow: 0 4px 14px rgba(42,100,150,0.12); }
+        .hp-scard-thumb {
+          width: 76px; flex-shrink: 0;
+          background: linear-gradient(135deg,#1e4460,#3d88b8);
+          display: flex; align-items: center; justify-content: center;
+        }
+        .hp-scard-thumb.c2 { background: linear-gradient(135deg,#2a6496,#5ba3cc); }
+        .hp-scard-thumb.c3 { background: linear-gradient(135deg,#3d88b8,#7ec4e0); }
+        .hp-scard-thumb.c4 { background: linear-gradient(135deg,#1a3040,#2a6496); }
+        .hp-scard-body { padding: 9px 12px; flex:1; min-width:0; }
+        .hp-scard-title { font-size: 0.78em; font-weight: 700; color: #1e4460; line-height: 1.4;
+          display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .hp-scard-meta { font-size: 0.68em; color: #5ba3cc; margin-top: 4px; }
+
+        .hp-news-more {
+          display: block; width: fit-content; margin: 16px auto 0;
+          padding: 8px 28px; border-radius: 20px;
+          background: white; border: 2px solid #3d88b8;
+          color: #2a6496; font-weight: 700; font-size: 0.82em;
+          cursor: pointer; font-family: inherit; transition: 0.15s;
+        }
+        .hp-news-more:hover { background: #eef5f9; }
+
+        /* ── Right panel: service buttons ── */
+        .hp-right-panel {
+          background: white;
+          border-radius: 16px;
+          padding: 22px 24px;
+          border: 1px solid #cce4f0;
+          box-shadow: 0 3px 18px rgba(42,100,150,0.09);
+        }
+        .hp-right-panel .hp-section-head { margin-bottom: 12px; }
+        .hp-svc-grid {
+          display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+        }
+        .hp-svc-btn {
+          background: white; border-radius: 12px; border: 1px solid #cce2ef;
+          padding: 18px 10px 14px; text-align: center;
+          cursor: pointer; transition: all 0.18s;
+        }
+        .hp-svc-btn:hover { border-color: #3d88b8; box-shadow: 0 4px 16px rgba(42,100,150,0.14); transform: translateY(-2px); background: #f5fafd; }
+        .hp-svc-ico {
+          width: 46px; height: 46px; border-radius: 13px; margin: 0 auto 9px;
+          background: #eef5f9;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .hp-svc-ico svg { stroke: #2a6496; }
+        .hp-svc-label { font-size: 0.75em; font-weight: 700; color: #1e4460; line-height: 1.3; }
+
+        /* ── Footer ── */
+        .hp-footer {
+          background: linear-gradient(135deg,#1a3040,#1e4460);
+          margin-top: 0; padding: 36px 28px 24px;
+          width: 100%;
+        }
+        @media(max-width:768px){ .hp-footer { padding: 28px 16px 20px; margin-top: 20px; } }
+        .hp-footer-inner {
+          max-width: 1240px; margin: 0 auto;
+          display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        }
+        @media(max-width:768px){ .hp-footer-inner { grid-template-columns: 1fr; gap: 24px; } }
+        .hp-footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .hp-footer-logo img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
+        .hp-footer-org { font-weight: 700; font-size: 0.9em; color: white; line-height: 1.3; }
+        .hp-footer-org-sub { font-size: 0.7em; color: rgba(176,212,232,0.8); }
+        .hp-footer-info { list-style: none; padding: 0; margin: 0; }
+        .hp-footer-info li { display: flex; gap: 8px; font-size: 0.76em; color: rgba(176,212,232,0.85); margin-bottom: 8px; line-height: 1.5; }
+        .hp-footer-col-title { font-size: 0.8em; font-weight: 700; color: white; margin-bottom: 12px; }
+        .hp-footer-links { list-style: none; padding: 0; margin: 0; }
+        .hp-footer-links li { font-size: 0.76em; color: rgba(176,212,232,0.8); margin-bottom: 7px; cursor: pointer; transition: color 0.15s; }
+        .hp-footer-links li::before { content: "→ "; }
+        .hp-footer-links li:hover { color: white; }
+        .hp-footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 28px; padding-top: 16px; text-align: center; font-size: 0.7em; color: rgba(176,212,232,0.6); }
+        .hp-footer-socials { display: flex; gap: 10px; margin-top: 14px; }
+        .hp-footer-social-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s; text-decoration: none; }
+        .hp-footer-social-btn:hover { background: rgba(255,255,255,0.2); }
+      </style>
+
+      <!-- ① HERO: Slideshow + Calendar -->
+      <div class="hp-hero">
+        <div class="hp-slide-col">
+          <div id="homeSlideshow" class="home-slideshow">
+            <div class="slide-placeholder" id="slidePlaceholder">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#5ba3cc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span style="margin-top:10px;font-size:.82em;color:#5ba3cc;">ยังไม่มีรูปสไลด์ — Admin สามารถเพิ่มได้ในระบบจัดการสไลด์</span>
+            </div>
+            <button class="slide-arrow prev" onclick="slidePrev()" style="display:none" id="slidePrevBtn">&#8249;</button>
+            <button class="slide-arrow next" onclick="slideNext()" style="display:none" id="slideNextBtn">&#8250;</button>
+            <div class="slide-nav-dots" id="slideNavDots"></div>
+          </div>
+        </div>
+        <div class="hp-cal-col">
+          <div class="hp-cal-head">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            ปฏิทินกิจกรรม
+          </div>
+          <div class="hp-cal-body">
+            <div class="hp-cal-nav-row">
+              <button class="hp-cal-btn" onclick="hpCalNav(-1)">&#8249;</button>
+              <div class="hp-cal-month" id="hpCalTitle">—</div>
+              <button class="hp-cal-btn" onclick="hpCalNav(1)">&#8250;</button>
+            </div>
+            <div class="hp-cal-grid" id="hpCalGrid"></div>
+          </div>
+          <div class="hp-cal-events">
+            <div class="hp-cal-events-title">กิจกรรมเดือนนี้</div>
+            <div id="hpEventsList"><div style="text-align:center;padding:10px;color:#b0d4e8;font-size:.75em;">กำลังโหลด...</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② QUICK LINKS (3 ปุ่ม แบบสาธิตมช.) -->
+      <div class="hp-quick">
+        <div class="hp-quick-inner">
+          <div class="hp-quick-item" onclick="showPage('activity-calendar', document.getElementById('menu-activity-calendar')); loadActivityCalendar()">
+            <div class="hp-quick-ico">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+            </div>
+            <div><div class="hp-quick-label">ปฏิทินกิจกรรม</div><div class="hp-quick-desc">กิจกรรมและวันสำคัญ</div></div>
+          </div>
+          <div class="hp-quick-item" onclick="showPage('order', document.getElementById('menu-order'))">
+            <div class="hp-quick-ico">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+            </div>
+            <div><div class="hp-quick-label">ร้านค้าสโมสร</div><div class="hp-quick-desc">สินค้าและของที่ระลึก</div></div>
+          </div>
+          <div class="hp-quick-item" onclick="showPage('equipment', document.getElementById('menu-equipment'))">
+            <div class="hp-quick-ico">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+            </div>
+            <div><div class="hp-quick-label">ยืม-คืนอุปกรณ์</div><div class="hp-quick-desc">กล้อง ไฟ ไมค์ และอื่นๆ</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ CONTENT: News (left) + Services (right) -->
+      <div class="hp-content">
+
+        <!-- News -->
+        <div class="hp-news-section">
+          <div class="hp-section-head">ข่าวสารและประชาสัมพันธ์</div>
+          <div class="hp-news-tabs">
+            <button class="hp-ntab active" onclick="hpTab(this,'fb')">ข่าวล่าสุด</button>
+            <button class="hp-ntab" onclick="hpTab(this,'ann')">ประกาศ/ประชาสัมพันธ์</button>
+          </div>
+          <div id="hpTabFb">
+            <div class="hp-ncard feat" style="width:100%;">
+              <div class="hp-ncard-thumb" style="min-height:0; aspect-ratio: unset; overflow:hidden; background:#fff;">
+                <iframe
+                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fsmoeducmu&tabs=timeline&width=800&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
+                  style="width:100%; height:500px; display:block; border:none; overflow:hidden;"
+                  scrolling="no" frameborder="0" allowfullscreen
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                </iframe>
+              </div>
+              <div class="hp-ncard-body">
+                <div class="hp-ncard-meta"><svg width="11" height="11" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg> เพจ Facebook สโมสรนักศึกษา</div>
+                <div class="hp-ncard-title">ติดตามข่าวสารล่าสุดจากสโมสรนักศึกษา คณะศึกษาศาสตร์ มช. (SMO EDU CMU)</div>
+                <a class="hp-ncard-read" href="https://www.facebook.com/smoeducmu/?locale=th_TH" target="_blank">ดูเพิ่มเติม →</a>
+              </div>
+            </div>
+            <button class="hp-news-more">ข่าวทั้งหมด</button>
+          </div>
+          <div id="hpTabAnn" style="display:none;">
+            <div style="text-align:center;padding:48px;color:#5ba3cc;font-size:.88em;">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#b0d4e8" stroke-width="1.5" style="display:block;margin:0 auto 12px"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+              ยังไม่มีประกาศในขณะนี้
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Service buttons grid -->
+        <div class="hp-right-panel">
+          <div class="hp-section-head">เมนูบริการ</div>
+          <div class="hp-svc-grid">
+            <div class="hp-svc-btn" data-system="order" onclick="showPage('order', document.getElementById('menu-order'))">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
+              <div class="hp-svc-label">สั่งซื้อสินค้า</div>
+            </div>
+            <div class="hp-svc-btn" data-system="tracking" onclick="showPage('tracking', document.getElementById('menu-tracking'))">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="hp-svc-label">ติดตามสถานะ</div>
+            </div>
+            <div class="hp-svc-btn" data-system="equipment" onclick="showPage('equipment', document.getElementById('menu-equipment'))">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+              <div class="hp-svc-label">ยืมอุปกรณ์</div>
+            </div>
+            <div class="hp-svc-btn" data-system="booking" onclick="showPage('booking', document.getElementById('menu-booking'))">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+              <div class="hp-svc-label">จองห้อง</div>
+            </div>
+            <div class="hp-svc-btn" data-system="calendar" onclick="showPage('calendar', document.getElementById('menu-calendar')); loadCalendarData()">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div class="hp-svc-label">ตารางจอง</div>
+            </div>
+            <div class="hp-svc-btn" data-system="faq" onclick="showPage('faq', document.getElementById('menu-faq'))">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="hp-svc-label">FAQ</div>
+            </div>
+            <div class="hp-svc-btn" data-system="contact" onclick="showPage('contact', document.getElementById('menu-contact'))">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a2 2 0 011.72-2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 15.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+              <div class="hp-svc-label">ติดต่อ</div>
+            </div>
+            <div class="hp-svc-btn" data-system="activityCalendar" onclick="showPage('activity-calendar', document.getElementById('menu-activity-calendar')); loadActivityCalendar()">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg></div>
+              <div class="hp-svc-label">ปฏิทินกิจกรรม</div>
+            </div>
+            <div class="hp-svc-btn" data-system="clubs" onclick="showPage('clubs', document.getElementById('menu-clubs'))">
+              <div class="hp-svc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+              <div class="hp-svc-label">ลงทะเบียนชุมนุม</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <script>
+      // ── Mini Calendar ──
+      var _hpCD = new Date(), _hpEV = [];
+      var _HM = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      var _HMS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+      function hpCalNav(d){ _hpCD.setMonth(_hpCD.getMonth()+d); renderHpCal(); }
+      function renderHpCal(){
+        var y=_hpCD.getFullYear(), m=_hpCD.getMonth();
+        document.getElementById('hpCalTitle').textContent = _HM[m]+' '+(y+543);
+        var t=new Date(), ty=t.getFullYear(), tm=t.getMonth(), td=t.getDate();
+        var fd=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate();
+        var ev={};
+        _hpEV.forEach(function(e){ var d=new Date(e.date); if(d.getFullYear()===y&&d.getMonth()===m) ev[d.getDate()]=true; });
+        var h=['อา','จ','อ','พ','พฤ','ศ','ส'].map(function(d){ return '<div class="hd">'+d+'</div>'; }).join('');
+        var p=new Date(y,m,0).getDate();
+        for(var i=fd-1;i>=0;i--) h+='<div class="dc om">'+(p-i)+'</div>';
+        for(var d2=1;d2<=dim;d2++){
+          var c='dc';
+          if(y===ty&&m===tm&&d2===td) c+=' td';
+          else if(ev[d2]) c+=' ev';
+          h+='<div class="'+c+'">'+d2+'</div>';
+        }
+        document.getElementById('hpCalGrid').innerHTML=h;
+        var up=_hpEV.filter(function(e){ var d=new Date(e.date); return d.getFullYear()===y&&d.getMonth()===m; }).slice(0,5);
+        document.getElementById('hpEventsList').innerHTML = up.length
+          ? up.map(function(e){ var d=new Date(e.date); return '<div class="hp-cal-ev-item"><div class="hp-cal-ev-dot"></div><div class="hp-cal-ev-text"><strong>'+d.getDate()+' '+_HMS[d.getMonth()]+'</strong> '+e.title+'</div></div>'; }).join('')
+          : '<div style="text-align:center;padding:10px;color:#b0d4e8;font-size:.75em;">ไม่มีกิจกรรมในเดือนนี้</div>';
+      }
+      function hpTab(b,t){
+        document.querySelectorAll('.hp-ntab').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        document.getElementById('hpTabFb').style.display = t==='fb'?'':'none';
+        document.getElementById('hpTabAnn').style.display = t==='ann'?'':'none';
+      }
+      (function(){
+        renderHpCal();
+        if(typeof google!=='undefined'&&google.script){
+          google.script.run.withSuccessHandler(function(r){ if(r&&r.events){ _hpEV=r.events; renderHpCal(); } }).getActivityEvents();
+        }
+      })();
+      </script>
+
+    </div>
+
+    <!-- ===== หน้าติดตามสถานะ ===== -->
