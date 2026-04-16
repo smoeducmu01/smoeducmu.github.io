@@ -1,0 +1,310 @@
+<!-- ===== ปฏิทินกิจกรรม ===== -->
+  <div id="page-activity-calendar" class="card">
+    <style>
+      .acal-hero{background:linear-gradient(120deg,#0d2454 0%,#1565c0 60%,#1976d2 100%);color:white;padding:28px 32px;margin-bottom:0;}
+      .acal-hero h2{margin:0 0 6px;font-size:1.35em;font-weight:700;}
+      .acal-hero p{margin:0;opacity:.75;font-size:.9em;}
+      .acal-body{padding:28px 32px;}
+      .acal-layout{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start;}
+      @media(max-width:900px){.acal-layout{grid-template-columns:1fr;}}
+      .acal-cal-wrap{background:white;border-radius:14px;border:1px solid #e0e7f0;overflow:hidden;box-shadow:0 2px 10px rgba(21,101,192,.07);}
+      .acal-cal-header{background:#1565c0;color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+      .acal-cal-nav{background:rgba(255,255,255,.18);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;}
+      .acal-cal-nav:hover{background:rgba(255,255,255,.3);}
+      .acal-cal-my{font-size:1rem;font-weight:700;}
+      .acal-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);}
+      .acal-dname{text-align:center;padding:9px 4px;font-size:11px;font-weight:700;color:#64748b;background:#f8fafc;border-bottom:1px solid #e8edf5;}
+      .acal-cell{border:.5px solid #e8edf5;text-align:right;padding:5px 7px;min-height:64px;font-size:12px;cursor:pointer;background:white;transition:background .15s;position:relative;}
+      .acal-cell:hover{background:#eff6ff;}
+      .acal-cell.other-month{color:#cbd5e1;background:#fafbfc;}
+      .acal-cell.today{background:#eff6ff;}
+      .acal-cell.today .acal-daynum{background:#1565c0;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;}
+      .acal-daynum{font-weight:600;font-size:12px;margin-bottom:2px;}
+      .acal-ev-label{font-size:9.5px;background:#1565c0;color:white;border-radius:3px;padding:1px 4px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
+      .acal-ev-label.camp{background:#f59e0b;}
+      .acal-ev-label.academic{background:#10b981;}
+      .acal-ev-list-wrap{background:white;border-radius:14px;border:1px solid #e0e7f0;overflow:hidden;box-shadow:0 2px 10px rgba(21,101,192,.07);}
+      .acal-ev-list-head{background:#1565c0;color:white;padding:14px 18px;font-weight:700;font-size:.95em;}
+      .acal-ev-list-body{padding:12px;}
+      .acal-ev-item{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:10px;margin-bottom:8px;border-left:4px solid #1565c0;background:white;box-shadow:0 1px 4px rgba(21,101,192,.07);transition:.2s;}
+      .acal-ev-item:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(21,101,192,.12);}
+      .acal-ev-item.camp{border-left-color:#f59e0b;}
+      .acal-ev-item.academic{border-left-color:#10b981;}
+      .acal-ev-badge{background:#1565c0;color:white;border-radius:8px;padding:7px 10px;text-align:center;min-width:48px;flex-shrink:0;}
+      .acal-ev-item.camp .acal-ev-badge{background:#f59e0b;}
+      .acal-ev-item.academic .acal-ev-badge{background:#10b981;}
+      .acal-ev-day{font-size:1.3rem;font-weight:800;line-height:1;}
+      .acal-ev-month{font-size:10px;opacity:.85;}
+      .acal-ev-title{font-weight:700;font-size:.92em;color:#0d2340;margin-bottom:3px;}
+      .acal-ev-meta{font-size:.8em;color:#64748b;}
+      .acal-legend{display:flex;gap:14px;flex-wrap:wrap;padding:0 0 16px;}
+      .acal-leg-item{display:flex;align-items:center;gap:6px;font-size:.78em;color:#64748b;}
+      .acal-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+    </style>
+    <div class="acal-hero">
+      <h2>🗓️ ปฏิทินกิจกรรมสโมสรนักศึกษา</h2>
+      <p>ติดตามกิจกรรม ค่าย และงานต่างๆ ของสโมสรนักศึกษา คณะศึกษาศาสตร์</p>
+    </div>
+    <div class="acal-body">
+      <div class="acal-legend">
+        <div class="acal-leg-item"><div class="acal-leg-dot" style="background:#1565c0;"></div>กิจกรรมทั่วไป</div>
+        <div class="acal-leg-item"><div class="acal-leg-dot" style="background:#f59e0b;"></div>ค่าย / อาสา</div>
+        <div class="acal-leg-item"><div class="acal-leg-dot" style="background:#10b981;"></div>วิชาการ / สัมมนา</div>
+      </div>
+      <div class="acal-layout">
+        <div>
+          <div class="acal-cal-wrap">
+            <div class="acal-cal-header">
+              <button class="acal-cal-nav" onclick="acalNav(-1)">&#8249;</button>
+              <div class="acal-cal-my" id="acalMonthYear">—</div>
+              <button class="acal-cal-nav" onclick="acalNav(1)">&#8250;</button>
+            </div>
+            <div class="acal-cal-grid">
+              <div class="acal-dname">อา</div><div class="acal-dname">จ</div>
+              <div class="acal-dname">อ</div><div class="acal-dname">พ</div>
+              <div class="acal-dname">พฤ</div><div class="acal-dname">ศ</div>
+              <div class="acal-dname">ส</div>
+            </div>
+            <div class="acal-cal-grid" id="acalCells"></div>
+          </div>
+        </div>
+        <div>
+          <div class="acal-ev-list-wrap">
+            <div class="acal-ev-list-head" id="acalListHead">กิจกรรมเดือนนี้</div>
+            <div class="acal-ev-list-body" id="acalEventList">
+              <div style="text-align:center;padding:24px;color:#94a3b8;font-size:.88em;">⏳ กำลังโหลด...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ลงทะเบียนกิจกรรม ===== -->
+  <div id="page-clubs" class="card">
+    <style>
+      .act-hero{background:linear-gradient(120deg,#0d2454 0%,#1565c0 60%,#1976d2 100%);color:white;padding:28px 32px;}
+      .act-hero h2{margin:0 0 6px;font-size:1.35em;font-weight:700;}
+      .act-hero p{margin:0;opacity:.75;font-size:.9em;}
+      .act-body{padding:24px 32px;}
+      @media(max-width:640px){.act-body{padding:16px;}}
+      .act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:8px;}
+      @media(max-width:640px){.act-grid{grid-template-columns:1fr;}}
+      .act-card{background:white;border-radius:16px;border:1.5px solid #e0e7f0;overflow:hidden;box-shadow:0 2px 10px rgba(21,101,192,.07);transition:.22s;cursor:pointer;}
+      .act-card:hover{border-color:#93c5fd;transform:translateY(-3px);box-shadow:0 8px 24px rgba(21,101,192,.14);}
+      .act-card.closed{opacity:.65;cursor:not-allowed;}
+      .act-card-banner{height:7px;background:linear-gradient(90deg,#1565c0,#42a5f5);}
+      .act-card.type-camp .act-card-banner{background:linear-gradient(90deg,#f59e0b,#fcd34d);}
+      .act-card.type-academic .act-card-banner{background:linear-gradient(90deg,#10b981,#6ee7b7);}
+      .act-card.type-volunteer .act-card-banner{background:linear-gradient(90deg,#8b5cf6,#c4b5fd);}
+      .act-card-body{padding:16px 18px 14px;}
+      .act-card-type{display:inline-flex;align-items:center;gap:5px;font-size:.72em;font-weight:700;padding:3px 10px;border-radius:20px;background:#eff6ff;color:#1565c0;margin-bottom:10px;}
+      .act-card.type-camp .act-card-type{background:#fffbeb;color:#d97706;}
+      .act-card.type-academic .act-card-type{background:#ecfdf5;color:#059669;}
+      .act-card.type-volunteer .act-card-type{background:#f5f3ff;color:#7c3aed;}
+      .act-card-title{font-size:.97em;font-weight:800;color:#0d2340;margin-bottom:8px;line-height:1.35;}
+      .act-card-meta{font-size:.78em;color:#64748b;display:flex;flex-direction:column;gap:4px;}
+      .act-card-footer{padding:10px 18px 14px;display:flex;align-items:center;justify-content:space-between;}
+      .act-card-count{font-size:.78em;color:#64748b;}
+      .act-card-count b{color:#1565c0;}
+      .act-card-bar-wrap{height:5px;background:#e2e8f0;border-radius:10px;margin-top:4px;overflow:hidden;}
+      .act-card-bar{height:100%;background:linear-gradient(90deg,#1565c0,#42a5f5);border-radius:10px;transition:.4s;}
+      .act-btn-reg{background:linear-gradient(135deg,#0d2454,#1565c0);color:white;border:none;padding:8px 18px;border-radius:8px;font-size:.8em;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;}
+      .act-btn-reg:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,36,84,.25);}
+      .act-btn-closed{background:#e2e8f0;color:#94a3b8;border:none;padding:8px 18px;border-radius:8px;font-size:.8em;font-weight:700;cursor:not-allowed;font-family:inherit;}
+      .act-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:flex-start;justify-content:center;overflow-y:auto;padding:20px;backdrop-filter:blur(3px);}
+      .act-modal-overlay.open{display:flex;}
+      .act-modal{background:white;border-radius:20px;width:100%;max-width:600px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:auto;position:relative;}
+      .act-modal-header{background:linear-gradient(135deg,#0d2454,#1565c0);padding:22px 26px;color:white;}
+      .act-modal-header h3{margin:0 0 4px;font-size:1.1em;font-weight:700;}
+      .act-modal-header p{margin:0;font-size:.82em;opacity:.75;}
+      .act-modal-close{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.18);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1em;display:flex;align-items:center;justify-content:center;transition:.2s;}
+      .act-modal-close:hover{background:rgba(255,255,255,.3);}
+      .act-modal-body{padding:22px 26px;}
+      @media(max-width:640px){.act-modal-body{padding:16px;}}
+      .act-form-section{margin-bottom:20px;}
+      .act-form-section-title{font-size:.75em;font-weight:800;color:#94a3b8;letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1.5px solid #f1f5f9;}
+      .act-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+      @media(max-width:480px){.act-form-row{grid-template-columns:1fr;}}
+      .act-form-group{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+      .act-form-group label{font-size:.78em;font-weight:700;color:#475569;}
+      .act-form-group label .req{color:#ef4444;margin-left:2px;}
+      .act-form-group input,.act-form-group select,.act-form-group textarea{margin:0!important;font-size:.88em!important;}
+      .act-food-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+      .act-food-tab{padding:7px 14px;border:1.5px solid #e2e8f0;border-radius:20px;font-size:.8em;font-weight:700;cursor:pointer;background:white;color:#64748b;transition:.15s;font-family:inherit;}
+      .act-food-tab.active{border-color:#1565c0;background:#eff6ff;color:#1565c0;}
+      .act-autofill-banner{background:linear-gradient(135deg,#06c755,#00b548);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px;cursor:pointer;transition:.2s;border:none;width:100%;text-align:left;font-family:inherit;}
+      .act-autofill-banner:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(6,199,85,.3);}
+      .act-autofill-banner .line-icon{width:36px;height:36px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3em;flex-shrink:0;}
+      .act-autofill-banner .line-text{color:white;}
+      .act-autofill-banner .line-text b{font-size:.9em;display:block;}
+      .act-autofill-banner .line-text span{font-size:.75em;opacity:.85;}
+      .act-autofill-done{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:.82em;color:#065f46;margin-bottom:14px;font-weight:600;}
+      .act-terms-box{background:#f8faff;border:1.5px solid #dde8f8;border-radius:12px;padding:14px 16px;font-size:.78em;color:#475569;line-height:1.75;max-height:110px;overflow-y:auto;margin-bottom:10px;}
+      .act-terms-check{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.85em;color:#1e293b;margin-bottom:14px;}
+      .act-terms-check input[type=checkbox]{width:18px;height:18px;flex-shrink:0;margin:2px 0 0;cursor:pointer;accent-color:#1565c0;}
+      .act-submit-btn{width:100%;background:linear-gradient(135deg,#0d2454,#1565c0);color:white;border:none;padding:14px;border-radius:12px;font-size:.95em;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;letter-spacing:.02em;}
+      .act-submit-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,36,84,.3);}
+      .act-submit-btn:disabled{background:#94a3b8;cursor:not-allowed;transform:none;box-shadow:none;}
+      .act-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+      .act-filter-chip{padding:6px 14px;border:1.5px solid #e2e8f0;border-radius:20px;font-size:.8em;font-weight:700;cursor:pointer;background:white;color:#64748b;transition:.15s;font-family:inherit;}
+      .act-filter-chip.active{border-color:#1565c0;background:#eff6ff;color:#1565c0;}
+    </style>
+
+    <div class="act-hero">
+      <h2>📋 ลงทะเบียนกิจกรรม</h2>
+      <p>เลือกกิจกรรมที่สนใจและกรอกข้อมูลสมัครเข้าร่วม</p>
+    </div>
+
+    <div class="act-body">
+      <div class="act-filter-bar" id="actFilterBar">
+        <button class="act-filter-chip active" onclick="filterActivities('all',this)">ทั้งหมด</button>
+        <button class="act-filter-chip" onclick="filterActivities('general',this)">กิจกรรมทั่วไป</button>
+        <button class="act-filter-chip" onclick="filterActivities('camp',this)">ค่าย / อาสา</button>
+        <button class="act-filter-chip" onclick="filterActivities('academic',this)">วิชาการ</button>
+        <button class="act-filter-chip" onclick="filterActivities('volunteer',this)">จิตอาสา</button>
+      </div>
+      <div class="act-grid" id="actGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8;">⏳ กำลังโหลดกิจกรรม...</div>
+      </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="act-modal-overlay" id="actRegModal">
+      <div class="act-modal">
+        <div class="act-modal-header">
+          <h3 id="actModalTitle">ลงทะเบียนกิจกรรม</h3>
+          <p id="actModalSubtitle"></p>
+          <button class="act-modal-close" onclick="closeActModal()">✕</button>
+        </div>
+        <div class="act-modal-body">
+
+          <!-- LINE Autofill -->
+          <button class="act-autofill-banner" onclick="actToggleLinePrompt()">
+            <div class="line-icon">💬</div>
+            <div class="line-text">
+              <b>ดึงข้อมูลจาก LINE อัตโนมัติ</b>
+              <span>เคยลงทะเบียนผ่าน LINE แล้ว? กดเพื่อกรอกข้อมูลอัตโนมัติ</span>
+            </div>
+          </button>
+          <div id="actLinePrompt" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+            <div style="font-size:.8em;font-weight:700;color:#166534;margin-bottom:8px;">กรอกรหัสนักศึกษาเพื่อดึงข้อมูลจาก LINE</div>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="actSidForLine" placeholder="เช่น 6530500000-5" style="flex:1;margin:0;font-size:.85em;">
+              <button onclick="actDoFillFromLine()" style="background:#06c755;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.82em;white-space:nowrap;font-family:inherit;">ดึงข้อมูล</button>
+            </div>
+          </div>
+          <div id="actAutofillDone" class="act-autofill-done" style="display:none;">
+            ✅ ดึงข้อมูลจาก LINE สำเร็จ — กรุณาตรวจสอบก่อนกดส่ง
+          </div>
+
+          <!-- ข้อมูลส่วนตัว -->
+          <div class="act-form-section">
+            <div class="act-form-section-title">👤 ข้อมูลส่วนตัว</div>
+            <div class="act-form-row">
+              <div class="act-form-group">
+                <label>ชื่อ <span class="req">*</span></label>
+                <input type="text" id="act_fname" placeholder="ชื่อ">
+              </div>
+              <div class="act-form-group">
+                <label>นามสกุล <span class="req">*</span></label>
+                <input type="text" id="act_lname" placeholder="นามสกุล">
+              </div>
+            </div>
+            <div class="act-form-row">
+              <div class="act-form-group">
+                <label>ชื่อเล่น</label>
+                <input type="text" id="act_nickname" placeholder="ชื่อเล่น">
+              </div>
+              <div class="act-form-group">
+                <label>รหัสนักศึกษา <span class="req">*</span></label>
+                <input type="text" id="act_sid" placeholder="6530500000-5">
+              </div>
+            </div>
+            <div class="act-form-row">
+              <div class="act-form-group">
+                <label>ชั้นปี <span class="req">*</span></label>
+                <select id="act_year">
+                  <option value="">-- เลือกชั้นปี --</option>
+                  <option value="1">ปี 1</option>
+                  <option value="2">ปี 2</option>
+                  <option value="3">ปี 3</option>
+                  <option value="4">ปี 4</option>
+                </select>
+              </div>
+              <div class="act-form-group">
+                <label>เบอร์โทรศัพท์ <span class="req">*</span></label>
+                <input type="tel" id="act_phone" placeholder="08X-XXX-XXXX">
+              </div>
+            </div>
+            <div class="act-form-row">
+              <div class="act-form-group">
+                <label>สาขาวิชา <span class="req">*</span></label>
+                <input type="text" id="act_major" placeholder="เช่น คอมพิวเตอร์ศึกษา">
+              </div>
+              <div class="act-form-group">
+                <label>คณะ <span class="req">*</span></label>
+                <input type="text" id="act_faculty" placeholder="เช่น ศึกษาศาสตร์">
+              </div>
+            </div>
+          </div>
+
+          <!-- ข้อมูลสุขภาพ -->
+          <div class="act-form-section">
+            <div class="act-form-section-title">🏥 ข้อมูลสุขภาพ</div>
+            <div class="act-form-group">
+              <label>ประเภทอาหาร <span class="req">*</span></label>
+              <div class="act-food-tabs">
+                <button class="act-food-tab active" onclick="selectFoodType('normal',this)">🍱 ปกติ</button>
+                <button class="act-food-tab" onclick="selectFoodType('veg',this)">🥗 เจ / มังสวิรัติ</button>
+                <button class="act-food-tab" onclick="selectFoodType('halal',this)">☪️ อิสลาม (ฮาลาล)</button>
+              </div>
+              <input type="hidden" id="act_foodtype" value="normal">
+            </div>
+            <div class="act-form-row">
+              <div class="act-form-group">
+                <label>อาหารที่แพ้</label>
+                <input type="text" id="act_foodallergy" placeholder="เช่น อาหารทะเล (ถ้าไม่มีใส่ -)">
+              </div>
+              <div class="act-form-group">
+                <label>ยาที่แพ้</label>
+                <input type="text" id="act_drugallergy" placeholder="เช่น Aspirin (ถ้าไม่มีใส่ -)">
+              </div>
+            </div>
+            <div class="act-form-row">
+              <div class="act-form-group">
+                <label>โรคประจำตัว</label>
+                <input type="text" id="act_disease" placeholder="เช่น หอบหืด (ถ้าไม่มีใส่ -)">
+              </div>
+              <div class="act-form-group">
+                <label>ยาประจำตัว</label>
+                <input type="text" id="act_medicine" placeholder="ยาที่ต้องพกติดตัว (ถ้าไม่มีใส่ -)">
+              </div>
+            </div>
+          </div>
+
+          <!-- ข้อตกลง -->
+          <div class="act-form-section">
+            <div class="act-form-section-title">📄 ข้อตกลงและเงื่อนไข</div>
+            <div class="act-terms-box">
+              ข้าพเจ้ายืนยันว่าข้อมูลที่กรอกเป็นความจริงทุกประการ และยินยอมให้สโมสรนักศึกษาคณะศึกษาศาสตร์
+              ใช้ข้อมูลดังกล่าวในการจัดการกิจกรรม การติดต่อประสานงาน และการดูแลความปลอดภัยระหว่างกิจกรรม
+              ข้าพเจ้าเข้าใจว่าการลงทะเบียนจะสมบูรณ์เมื่อได้รับการยืนยันจากเจ้าหน้าที่
+              และจะปฏิบัติตามกฎระเบียบของกิจกรรมอย่างเคร่งครัด
+            </div>
+            <label class="act-terms-check">
+              <input type="checkbox" id="act_agree" onchange="checkActSubmit()">
+              <span>ข้าพเจ้าได้อ่านและยอมรับข้อตกลงและเงื่อนไขข้างต้น <span style="color:#ef4444;">*</span></span>
+            </label>
+          </div>
+
+          <div id="actFormAlert" style="display:none;padding:10px 14px;border-radius:8px;font-size:.85em;margin-bottom:12px;"></div>
+
+          <button class="act-submit-btn" id="actSubmitBtn" onclick="submitActivityRegistration()" disabled>
+            ✅ ส่งใบสมัครเข้าร่วมกิจกรรม
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
