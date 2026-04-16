@@ -1,0 +1,110 @@
+<div id="page-faq" class="card">
+      <h3 class="page-title">❓ คำถามที่พบบ่อย</h3>
+      <div class="faq-search-wrap">
+        <input type="text" id="faqSearch" placeholder="ค้นหาคำถาม..." oninput="filterFaq(this.value)" style="margin:0 0 12px;">
+      </div>
+      <div class="faq-cat-tabs" id="faqTabs">
+        <button class="faq-tab active" onclick="filterFaqCat('all', this)">ทั้งหมด</button>
+        <button class="faq-tab" onclick="filterFaqCat('borrow', this)">ยืมอุปกรณ์</button>
+        <button class="faq-tab" onclick="filterFaqCat('booking', this)">จองห้อง</button>
+        <button class="faq-tab" onclick="filterFaqCat('order', this)">สั่งซื้อสินค้า</button>
+        <button class="faq-tab" onclick="filterFaqCat('general', this)">ทั่วไป</button>
+      </div>
+      <div id="faqList"></div>
+    </div>
+
+    <!-- ===== หน้าติดต่อทีมงาน ===== -->
+    <div id="page-contact" class="card">
+      <h3 class="page-title">📞 ติดต่อทีมงาน</h3>
+      <p style="font-size:0.86em; color:var(--text-muted); margin:-8px 0 18px;">ติดต่อเราได้หลายช่องทาง หรือส่งข้อความแจ้งปัญหาได้เลย</p>
+
+      <!-- LINE Registration Banner -->
+      <div style="background:linear-gradient(120deg,#06c755 0%,#00a246 100%); border-radius:16px; padding:20px 22px; margin-bottom:22px; color:white;">
+        <div style="display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap;">
+          <div style="font-size:2.8em; flex-shrink:0; line-height:1;">💬</div>
+          <div style="flex:1; min-width:200px;">
+            <div style="font-weight:700; font-size:1.05em; margin-bottom:5px;">รับการแจ้งเตือนผ่าน LINE</div>
+            <div style="font-size:0.85em; opacity:0.9; line-height:1.6;">
+              เมื่อสถานะการจอง/ยืม/สั่งซื้อเปลี่ยน ระบบจะแจ้งเตือนผ่าน LINE ทันที
+            </div>
+            <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+              <button onclick="showLineRegisterGuide()" style="background:white; color:#06c755; border:none; border-radius:8px; padding:8px 16px; font-size:0.85em; font-weight:700; cursor:pointer; font-family:inherit;">
+                📱 วิธีลงทะเบียน LINE
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINE Register Guide (hidden by default) -->
+      <div id="lineRegisterGuide" style="display:none; background:#f0fdf4; border:1.5px solid #86efac; border-radius:14px; padding:18px 20px; margin-bottom:22px;">
+        <div style="font-weight:700; color:#166534; font-size:0.95em; margin-bottom:14px;">📱 วิธีลงทะเบียนรับการแจ้งเตือนผ่าน LINE</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <div style="width:28px; height:28px; border-radius:50%; background:#06c755; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85em; flex-shrink:0;">1</div>
+            <div style="font-size:0.9em; color:#166534; padding-top:4px;">
+              <b>เพิ่มเพื่อน LINE OA</b> ของสโมสรนักศึกษา<br>
+              <span style="color:#475569;">สแกน QR Code หรือค้นหา ID: <b id="lineOaId">@mediaedu</b></span>
+            </div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <div style="width:28px; height:28px; border-radius:50%; background:#06c755; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85em; flex-shrink:0;">2</div>
+            <div style="font-size:0.9em; color:#166534; padding-top:4px;">
+              <b>ส่งรหัสนักศึกษา/บุคลากร</b> ของคุณมาในแชท<br>
+              <span style="color:#475569;">ตัวอย่าง: พิมพ์ <b>650210343</b> แล้วส่ง</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <div style="width:28px; height:28px; border-radius:50%; background:#06c755; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85em; flex-shrink:0;">3</div>
+            <div style="font-size:0.9em; color:#166534; padding-top:4px;">
+              <b>รับข้อความยืนยัน</b> จากระบบ<br>
+              <span style="color:#475569;">หลังจากนั้นจะได้รับแจ้งเตือนอัตโนมัติทุกครั้งที่สถานะเปลี่ยน</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px; background:white; border-radius:10px; padding:12px 14px; font-size:0.82em; color:#475569; border:1px solid #d1fae5;">
+          💡 <b>พิมพ์ "สถานะ"</b> ในแชท LINE เพื่อตรวจสอบว่าลงทะเบียนแล้วหรือยัง
+        </div>
+      </div>
+
+      <div class="contact-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <a class="contact-card" href="https://www.facebook.com/smoeducmu" target="_blank">
+          <div class="cc-icon">📘</div>
+          <div class="cc-title">Facebook Page</div>
+          <div class="cc-desc">สโมสรนักศึกษา คณะศึกษาศาสตร์<br>ติดตามข่าวสาร</div>
+        </a>
+        <div class="contact-card" onclick="document.getElementById('contactFormWrap').scrollIntoView({behavior:'smooth'})">
+          <div class="cc-icon">✉️</div>
+          <div class="cc-title">ส่งข้อความแจ้งปัญหา</div>
+          <div class="cc-desc">กรอกฟอร์มด้านล่าง<br>ทีมงานจะติดต่อกลับ</div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">🕐</div>
+          <div class="cc-title">เวลาทำการ</div>
+          <div class="cc-desc">จันทร์ – ศุกร์<br>08:30 – 16:30 น.</div>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap" id="contactFormWrap">
+        <h4>✉️ แจ้งปัญหา / ส่งข้อความหาทีมงาน</h4>
+        <div class="contact-type-select" id="contactTypes">
+          <button class="ctype-btn active" onclick="selectContactType(this)">🔧 แจ้งปัญหาระบบ</button>
+          <button class="ctype-btn" onclick="selectContactType(this)">❓ สอบถามข้อมูล</button>
+          <button class="ctype-btn" onclick="selectContactType(this)">📦 ปัญหาการยืม</button>
+          <button class="ctype-btn" onclick="selectContactType(this)">💬 ข้อเสนอแนะ</button>
+        </div>
+        <input type="text" id="contactName" placeholder="ชื่อ-นามสกุล *">
+        <input type="text" id="contactPhone" placeholder="เบอร์โทรศัพท์ *">
+        <input type="email" id="contactEmail" placeholder="อีเมล (สำหรับรับการตอบกลับ)">
+        <textarea id="contactMsg" placeholder="รายละเอียดปัญหาหรือข้อความที่ต้องการแจ้ง *" rows="4" style="width:100%; padding:12px 14px; border:1px solid #dde2ed; border-radius:10px; font-size:0.9em; font-family:inherit; resize:vertical; margin-bottom:10px;"></textarea>
+        <button class="btn btn-submit" onclick="submitContact()">📨 ส่งข้อความ</button>
+        <div class="contact-sent" id="contactSentMsg">
+          <div class="cs-icon">✅</div>
+          <p style="font-weight:700; color:var(--dark-blue);">ส่งข้อความสำเร็จ!</p>
+          <p style="font-size:0.85em; color:var(--text-muted);">ทีมงานจะติดต่อกลับภายใน 1-2 วันทำการ</p>
+          <button class="btn" onclick="resetContactForm()" style="margin-top:10px; background:white; color:var(--primary-blue); border:1px solid var(--primary-blue);">ส่งข้อความใหม่</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== หน้ายืมอุปกรณ์ ===== -->
