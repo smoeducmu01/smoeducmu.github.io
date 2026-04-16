@@ -1,0 +1,2009 @@
+<div id="page-calendar" class="card">
+      <h3 class="page-title">📅 ตารางการจองห้อง</h3>
+      <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: #f9fbfd; padding: 15px; border-radius: var(--border-radius-sm); border: 1px solid #e0e7ff;">
+        <button class="btn btn-details" style="width: auto; margin: 0;" onclick="changeMonth(-1)">⬅ ก่อนหน้า</button>
+        <h3 id="calendarMonthYear" style="margin: 0; color: var(--dark-blue);"></h3>
+        <button class="btn btn-details" style="width: auto; margin: 0;" onclick="changeMonth(1)">ถัดไป ➡</button>
+      </div>
+      <!-- Legend -->
+      <div style="margin-bottom: 14px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+        <span style="font-size:0.82em; color:#64748b; font-weight:600;">คลิกวันที่ใดก็ได้เพื่อดูห้องว่าง</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:0.82em;"><span style="width:10px;height:10px;background:#28a745;border-radius:50%;display:inline-block;"></span>อนุมัติแล้ว</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:0.82em;"><span style="width:10px;height:10px;background:#ffc107;border-radius:50%;display:inline-block;"></span>รออนุมัติ</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:0.82em;"><span style="width:10px;height:10px;background:#e0f2fe;border:1.5px solid #90caf9;border-radius:50%;display:inline-block;"></span>วันนี้</span>
+      </div>
+      <div class="calendar-container">
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+    </div>
+
+    <!-- ===== หน้า Admin Login ===== -->
+    <div id="page-admin-login" class="card">
+      <div class="admin-login-box">
+        <img src="https://lh3.googleusercontent.com/u/0/d/1Dh4WcFs9vE_cBag2RpHFupnORc0gg_mX" alt="Logo" class="login-logo">
+        <h2>Admin Panel</h2>
+        <p>สโมสรนักศึกษา คณะศึกษาศาสตร์</p>
+        <input type="text" id="adminUser" placeholder="👤 Username">
+        <input type="password" id="adminPass" placeholder="🔑 Password" onkeydown="if(event.key==='Enter') loginAdmin()">
+        <button id="btnLogin" class="btn-login" onclick="loginAdmin()">🔓 เข้าสู่ระบบ</button>
+      </div>
+    </div>
+
+    <!-- ===== หน้า Admin Dashboard ===== -->
+    <div id="page-admin-dashboard" class="card">
+
+      <!-- Header -->
+      <div class="admin-dash-header">
+        <div>
+          <h3>👋 สวัสดี, <span id="adminNameDisplay"></span>
+            <span id="adminRoleBadge" style="font-size:0.65em; font-weight:600; padding:3px 10px; border-radius:20px; margin-left:8px; vertical-align:middle;"></span>
+          </h3>
+          <p id="dashDateLine">ระบบจัดการหลังบ้าน · สโมสรนักศึกษา คณะศึกษาศาสตร์</p>
+        </div>
+        <button class="btn-logout" onclick="logoutAdmin()">🚪 ออกจากระบบ</button>
+      </div>
+
+      <!-- ===== STATS ===== -->
+      <div class="admin-group">
+        <div class="admin-group-label"><span>📊</span> ภาพรวมรายการรอดำเนินการ</div>
+        <div class="dash-stats-grid" id="dashStatsGrid">
+          <div class="dash-stat-card ds-orange" style="cursor:pointer;" data-role-page="manage-orders" onclick="openAdminSubPage('manage-orders')">
+            <div class="ds-icon">📦</div><div class="ds-label">ออเดอร์รอดำเนินการ</div>
+            <div class="ds-num" id="ds_orderPending">—</div>
+            <div class="ds-sub" id="ds_orderMonth">เดือนนี้ — รายการ</div>
+          </div>
+          <div class="dash-stat-card ds-purple" style="cursor:pointer;" data-role-page="manage-equip" onclick="openAdminSubPage('manage-equip')">
+            <div class="ds-icon">💻</div><div class="ds-label">คำขอยืมรออนุมัติ</div>
+            <div class="ds-num" id="ds_equipPending">—</div>
+            <div class="ds-sub" id="ds_equipMonth">เดือนนี้ — รายการ</div>
+          </div>
+          <div class="dash-stat-card ds-blue" style="cursor:pointer;" data-role-page="manage-booking" onclick="openAdminSubPage('manage-booking')">
+            <div class="ds-icon">🏫</div><div class="ds-label">จองห้องรออนุมัติ</div>
+            <div class="ds-num" id="ds_bookPending">—</div>
+            <div class="ds-sub" id="ds_bookMonth">เดือนนี้ — รายการ</div>
+          </div>
+          <div class="dash-stat-card" style="border-top:4px solid #f59e0b; cursor:pointer;" data-role-page="manage-messages" onclick="openAdminSubPage('manage-messages'); loadContactMessages()">
+            <div class="ds-icon">📨</div><div class="ds-label">ข้อความรอตอบกลับ</div>
+            <div class="ds-num" id="ds_msgPending">—</div>
+            <div class="ds-sub" id="ds_msgTotal">ทั้งหมด — ข้อความ</div>
+          </div>
+          <div class="dash-stat-card ds-green">
+            <div class="ds-icon">📦</div><div class="ds-label">ออเดอร์ทั้งหมด</div>
+            <div class="ds-num" id="ds_orderTotal">—</div><div class="ds-sub">รายการในระบบ</div>
+          </div>
+          <div class="dash-stat-card ds-teal">
+            <div class="ds-icon">💻</div><div class="ds-label">การยืมอุปกรณ์</div>
+            <div class="ds-num" id="ds_equipTotal">—</div><div class="ds-sub">รายการในระบบ</div>
+          </div>
+          <div class="dash-stat-card ds-red">
+            <div class="ds-icon">⚠️</div><div class="ds-label">อุปกรณ์ชำรุด/งดใช้</div>
+            <div class="ds-num" id="ds_broken">—</div><div class="ds-sub">รายการในคลัง</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== งานประจำ ===== -->
+      <div class="admin-group">
+        <div class="admin-group-label"><span>⚡</span> งานประจำ</div>
+        <div class="admin-action-list">
+
+          <div class="admin-action-row" onclick="openAdminSubPage('manage-orders')">
+            <div class="ar-icon" style="background:#fff7ed;">📦</div>
+            <div class="ar-text">
+              <div class="ar-title">จัดการออเดอร์</div>
+              <div class="ar-desc">อัปเดตสถานะ ตรวจสลิป ติดตามการจัดส่ง</div>
+            </div>
+            <span class="ar-badge zero" id="badge_orders">—</span>
+            <span class="ar-arrow">›</span>
+          </div>
+
+          <div class="admin-action-row" data-role-page="pickup-counter" onclick="openAdminSubPage('pickup-counter')" style="border-color:#bbf7d0; background:#f0fdf4;">
+            <div class="ar-icon" style="background:#dcfce7;">🏪</div>
+            <div class="ar-text">
+              <div class="ar-title">จุดรับสินค้า</div>
+              <div class="ar-desc">ค้นหาออเดอร์ จัดเตรียมของ มอบให้ลูกค้า + แจ้ง LINE/Email</div>
+            </div>
+            <span class="ar-arrow" style="color:#16a34a;">›</span>
+          </div>
+
+          <div class="admin-action-row" onclick="openAdminSubPage('manage-equip')">
+            <div class="ar-icon" style="background:#f5f3ff;">💻</div>
+            <div class="ar-text">
+              <div class="ar-title">คำขอยืมอุปกรณ์</div>
+              <div class="ar-desc">อนุมัติ / ปฏิเสธ / จัดส่งอุปกรณ์</div>
+            </div>
+            <span class="ar-badge zero" id="badge_equip">—</span>
+            <span class="ar-arrow">›</span>
+          </div>
+
+          <div class="admin-action-row" onclick="openAdminSubPage('manage-booking')">
+            <div class="ar-icon" style="background:#eff6ff;">🏫</div>
+            <div class="ar-text">
+              <div class="ar-title">จองห้อง</div>
+              <div class="ar-desc">อนุมัติคำขอใช้ห้อง / ออกเอกสาร</div>
+            </div>
+            <span class="ar-badge zero" id="badge_booking">—</span>
+            <span class="ar-arrow">›</span>
+          </div>
+
+          <div class="admin-action-row" onclick="openAdminSubPage('manage-messages'); loadContactMessages()">
+            <div class="ar-icon" style="background:#fffbeb;">📨</div>
+            <div class="ar-text">
+              <div class="ar-title">กล่องข้อความ</div>
+              <div class="ar-desc">ข้อความจากผู้ใช้ / ติดต่อทีมงาน</div>
+            </div>
+            <span class="ar-badge zero" id="badge_msg">—</span>
+            <span class="ar-arrow">›</span>
+          </div>
+
+          <div class="admin-action-row" data-role-page="equip-calendar" onclick="openAdminSubPage('equip-calendar'); loadEquipCalendar()">
+            <div class="ar-icon" style="background:#f0fdf4;">📅</div>
+            <div class="ar-text">
+              <div class="ar-title">ปฏิทินอุปกรณ์</div>
+              <div class="ar-desc">เช็คว่าง / ไม่ว่าง รายวัน</div>
+            </div>
+            <span class="ar-arrow">›</span>
+          </div>
+
+          <div class="admin-action-row" data-role-page="qr-scanner" onclick="openQrScanner()" style="border-color:#ddd6fe; background:#faf5ff;">
+            <div class="ar-icon" style="background:#f5f3ff;">📷</div>
+            <div class="ar-text">
+              <div class="ar-title">QR Scanner</div>
+              <div class="ar-desc">สแกนยืนยันรับ / คืน อุปกรณ์</div>
+            </div>
+            <span class="ar-arrow" style="color:#7c3aed;">›</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== จัดการข้อมูล ===== -->
+      <div class="admin-group">
+        <div class="admin-group-label"><span>🗂️</span> จัดการข้อมูล</div>
+        <div class="admin-manage-grid">
+          <div class="admin-manage-tile" data-role-page="manage-activities" onclick="openAdminSubPage('manage-activities'); loadActivitiesAdmin()">
+            <div class="mt-icon">📋</div><div class="mt-label">กิจกรรม</div>
+          </div>
+          <div class="admin-manage-tile" data-role-page="manage-products" onclick="openAdminSubPage('manage-products')">
+            <div class="mt-icon">🛒</div><div class="mt-label">สินค้า</div>
+          </div>
+          <div class="admin-manage-tile" data-role-page="manage-shipping" onclick="openAdminSubPage('manage-shipping'); loadAdminShipping()">
+            <div class="mt-icon">📬</div><div class="mt-label">การจัดส่ง</div>
+          </div>
+          <div class="admin-manage-tile" data-role-page="manage-inventory" onclick="openAdminSubPage('manage-inventory')">
+            <div class="mt-icon">📋</div><div class="mt-label">คลังอุปกรณ์</div>
+          </div>
+          <div class="admin-manage-tile" data-role-page="manage-rooms" onclick="openAdminSubPage('manage-rooms')">
+            <div class="mt-icon">🚪</div><div class="mt-label">ห้อง</div>
+          </div>
+          <div class="admin-manage-tile" data-role-page="manage-slides" onclick="openAdminSubPage('manage-slides'); loadSlidesAdmin()">
+            <div class="mt-icon">🖼️</div><div class="mt-label">สไลด์</div>
+          </div>
+          <div class="admin-manage-tile" data-role-page="manage-faq" onclick="openAdminSubPage('manage-faq'); loadFaqAdmin()">
+            <div class="mt-icon">❓</div><div class="mt-label">FAQ</div>
+          </div>
+          <div class="admin-manage-tile" data-role-page="manage-org" onclick="openAdminSubPage('manage-org'); loadOrgAdmin()">
+            <div class="mt-icon">🏛️</div><div class="mt-label">ทำเนียบองค์กร</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ตั้งค่า ===== -->
+      <div class="admin-group">
+        <div class="admin-group-label"><span>⚙️</span> ตั้งค่าระบบ</div>
+        <div class="admin-settings-strip">
+          <div class="admin-setting-chip" data-role-page="manage-email-config" onclick="openAdminSubPage('manage-email-config'); loadEmailConfig()">
+            <span>📧</span> ตั้งค่าอีเมล
+          </div>
+          <div class="admin-setting-chip" data-role-page="manage-delivery-config" onclick="openAdminSubPage('manage-delivery-config'); loadDeliveryConfig()">
+            <span>🚚</span> ผู้จ่ายของ
+          </div>
+          <div class="admin-setting-chip" onclick="openAdminSubPage('manage-faculty-api'); loadFacultyApiSettings()">
+            <span>🔗</span> Faculty API
+          </div>
+          <div class="admin-setting-chip" data-role-page="overdue-settings" onclick="openAdminSubPage('overdue-settings'); loadOverdueSettings()" style="border-color:#bfdbfe; color:#1e40af; background:#eff6ff;">
+            <span>⏰</span> แจ้งเตือนเกินกำหนด
+          </div>
+          <div class="admin-setting-chip" data-role-page="manage-line-templates" onclick="openAdminSubPage('manage-line-templates'); loadLineTemplates()" style="border-color:#fed7aa; color:#c2410c; background:#fff7ed; font-weight:700;">
+            💬 ข้อความ LINE Bot
+          </div>
+          <div class="admin-setting-chip" data-role-page="manage-line-users" onclick="openAdminSubPage('manage-line-users'); loadLineUsers()" style="border-color:#86efac; color:#166534; background:#f0fdf4;">
+            <span>💬</span> LINE Users
+          </div>
+          <div class="admin-setting-chip" data-role-page="manage-accounts" onclick="openAdminSubPage('manage-accounts'); loadAdminAccounts()" style="border-color:#c4b5fd; color:#6d28d9; background:#f5f3ff; font-weight:700;">
+            <span>👤</span> บัญชี Admin
+          </div>
+          <div class="admin-setting-chip" data-role-page="web-settings" onclick="openAdminSubPage('web-settings'); loadWebSettings()" style="border-color:#fca5a5; color:#b91c1c; background:#fff1f2; font-weight:700;">
+            <span>⚙️</span> ตั้งค่าเว็บ
+          </div>
+          <div class="admin-setting-chip" data-role-page="manage-line-admins" onclick="openAdminSubPage('manage-line-admins'); loadLineAdmins()" style="border-color:#a7f3d0; color:#065f46; background:#ecfdf5; font-weight:700;">
+            <span>🔔</span> LINE Admin
+          </div>
+          <div class="admin-setting-chip" data-role-page="audit-log" onclick="openAdminSubPage('audit-log'); loadAuditLog()" style="border-color:#fde68a; color:#92400e; background:#fffbeb;">
+            <span>📋</span> Audit Log
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-menu-grid" style="display:none;" id="inboxAdminBox"></div>
+
+    </div><!-- /page-admin-dashboard -->
+
+
+
+
+
+
+    <!-- ===== หน้าจัดการ LINE Users ===== -->
+    <!-- ===== หน้าตั้งค่าเว็บ ===== -->
+    <div id="page-web-settings" class="card">
+      <div class="admin-topbar" >
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <h3 class="page-title" style="margin:0;">⚙️ ตั้งค่าเว็บไซต์</h3>
+      </div>
+      <div style="max-width:700px; margin:0 auto;">
+
+        <!-- สถานะเว็บ -->
+        <div class="equip-section" style="margin-bottom:20px;">
+          <h4 style="display:flex; align-items:center; gap:10px;">
+            🌐 สถานะเว็บไซต์
+            <span id="ws_siteStatusBadge" style="font-size:0.72em; font-weight:700; padding:3px 12px; border-radius:20px;"></span>
+          </h4>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; background:#f8fafc; border-radius:12px; border:1.5px solid #e2e8f0; margin-bottom:14px;">
+            <div>
+              <div style="font-weight:700; font-size:0.95em; color:#1e293b;">เปิด/ปิดเว็บทั้งหมด</div>
+              <div style="font-size:0.82em; color:#64748b; margin-top:3px;">ปิดเว็บจะแสดงหน้าแจ้งปิดให้บริการแทน</div>
+            </div>
+            <div id="ws_siteTrack" onclick="onSiteToggle()"
+              style="width:56px; height:30px; border-radius:30px; background:#22c55e; position:relative; cursor:pointer; transition:background 0.3s; flex-shrink:0; box-shadow:inset 0 1px 3px rgba(0,0,0,0.15);">
+              <div id="ws_siteThumb"
+                style="width:24px; height:24px; border-radius:50%; background:white; position:absolute; top:3px; left:29px; transition:left 0.3s; box-shadow:0 2px 5px rgba(0,0,0,0.25);"></div>
+            </div>
+          </div>
+          <div id="ws_closedMsgWrap">
+            <label style="font-size:0.83em; font-weight:600; color:#374151; display:block; margin-bottom:6px;">ข้อความแจ้งเมื่อปิดเว็บ</label>
+            <textarea id="ws_closedMessage" rows="2" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:0.88em; box-sizing:border-box; resize:vertical;" placeholder="เช่น ระบบปิดให้บริการชั่วคราว กรุณากลับมาใหม่ในภายหลัง"></textarea>
+          </div>
+        </div>
+
+        <!-- เปิด/ปิดแต่ละระบบ -->
+        <div class="equip-section" style="margin-bottom:20px;">
+          <h4>🔧 เปิด/ปิดระบบต่างๆ</h4>
+          <div style="font-size:0.82em; color:#64748b; margin-bottom:14px;">ระบบที่ปิดจะซ่อนเมนูและหน้านั้นออกจากผู้ใช้ทั้งหมด</div>
+          <div id="ws_systemList" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <!-- ปุ่มบันทึก -->
+        <div style="display:flex; gap:12px; margin-top:4px;">
+          <button onclick="saveWebSettings()"
+            style="padding:12px 32px; background:linear-gradient(135deg,#1565c0,#42a5f5); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:0.95em;">
+            💾 บันทึกการตั้งค่า
+          </button>
+          <button onclick="loadWebSettings()"
+            style="padding:12px 20px; background:#f1f5f9; color:#475569; border:none; border-radius:12px; font-weight:600; cursor:pointer; font-size:0.9em;">
+            🔄 รีเซ็ต
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== หน้าทำเนียบองค์กร (สาธารณะ) ===== -->
+    <div id="page-org-directory" class="card" style="padding:0!important;">
+
+      <!-- Hero -->
+      <div class="org-dir-hero">
+        <h2>🏛️ ทำเนียบองค์กร</h2>
+        <p id="orgHeroSub">สโมสรนักศึกษา คณะศึกษาศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
+      </div>
+
+      <!-- Tab Bar ด้านบน -->
+      <div class="org-tab-wrap">
+        <div class="org-tab-bar" id="orgTabBar">
+          <button class="org-tab-item active" data-dept="__all__" onclick="selectOrgDept('__all__')">
+            🏠 ภาพรวมสโมสร
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content (full width) -->
+      <div class="org-layout">
+        <div class="org-main" id="orgMainContent">
+          <div class="org-empty-state">⏳ กำลังโหลดข้อมูล...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Detail Modal สมาชิก ===== -->
+    <div id="orgDetailModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeOrgDetail()">
+      <div class="modal-content org-detail-modal-content" style="position:relative;">
+        <button class="close-btn" onclick="closeOrgDetail()">✖</button>
+        <div class="org-detail-layout">
+          <!-- ซ้าย: รูปภาพ -->
+          <div class="org-detail-photo-col">
+            <div id="orgDetailAvatarWrap"></div>
+          </div>
+          <!-- ขวา: ข้อมูล -->
+          <div class="org-detail-body">
+            <div class="org-detail-name" id="orgDetailName"></div>
+            <div class="org-detail-pos"  id="orgDetailPos"></div>
+            <div id="orgDetailRows"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== หน้า Admin จัดการทำเนียบองค์กร ===== -->
+    <div id="page-manage-org" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">🏛️ จัดการทำเนียบองค์กร</span>
+        <button onclick="openOrgMemberModal(null)"
+          style="margin-left:auto; background:linear-gradient(135deg,#1e4460,#2a6496); color:white;
+          border:none; border-radius:10px; padding:9px 20px; font-family:inherit;
+          font-size:0.88em; font-weight:700; cursor:pointer; white-space:nowrap;">
+          ➕ เพิ่มสมาชิก
+        </button>
+      </div>
+
+      <!-- Setup banner -->
+      <div id="orgSetupBanner" style="display:none; background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px; padding:14px 18px; margin-bottom:16px; font-size:0.88em; color:#92400e;">
+        📋 ยังไม่มีข้อมูลในระบบ — กด Setup เพื่อสร้าง Google Sheet พร้อมข้อมูลตัวอย่าง<br>
+        <button onclick="doSetupOrgSheet()" style="margin-top:10px; background:#c2410c; color:white; border:none; border-radius:8px; padding:8px 20px; cursor:pointer; font-weight:700; font-family:inherit;">
+          ⚙️ Setup Sheet ทำเนียบองค์กร
+        </button>
+      </div>
+
+      <!-- Search & filter -->
+      <div class="org-admin-search">
+        <input type="text" id="orgAdminSearch" placeholder="🔍 ค้นหาชื่อ, ตำแหน่ง, ฝ่าย..."
+          oninput="filterOrgAdminTable(this.value)">
+        <select id="orgAdminDeptFilter" onchange="filterOrgAdminTable(document.getElementById('orgAdminSearch').value)"
+          style="padding:9px 14px; border:1.5px solid #e8edf5; border-radius:10px; font-family:inherit; font-size:0.88em; min-width:160px; margin:0;">
+          <option value="">— ทุกฝ่าย —</option>
+        </select>
+        <button onclick="loadOrgAdmin()"
+          style="background:#f1f5f9; color:#475569; border:none; border-radius:10px; padding:9px 16px; cursor:pointer; font-size:0.85em; font-weight:600; font-family:inherit;">
+          🔄 รีเฟรช
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-table-container">
+        <table class="admin-table" id="orgAdminTable" style="min-width:860px;">
+          <thead>
+            <tr>
+              <th style="width:44px;">ลำดับ</th>
+              <th style="width:50px;">รูป</th>
+              <th>ชื่อ-สกุล</th>
+              <th>สาขาวิชา</th>
+              <th>ตำแหน่ง</th>
+              <th>ฝ่าย</th>
+              <th style="width:80px;">สถานะ</th>
+              <th style="width:110px;">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="orgAdminTableBody">
+            <tr><td colspan="7" style="text-align:center; padding:30px; color:#94a3b8;">⏳ กำลังโหลด...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== Modal เพิ่ม/แก้ไขสมาชิก ===== -->
+    <div id="orgMemberModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeOrgModal()">
+      <div class="modal-content" style="max-width:580px;">
+        <button class="close-btn" onclick="closeOrgModal()">✖</button>
+        <h3 style="margin-top:0; color:var(--dark-blue);" id="orgModalTitle">➕ เพิ่มสมาชิก</h3>
+        <input type="hidden" id="org_rowIdx">
+        <input type="hidden" id="org_id">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 16px;">
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">ชื่อ <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="org_firstName" placeholder="เช่น สมชาย">
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">นามสกุล</label>
+            <input type="text" id="org_lastName" placeholder="เช่น ใจดี">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">สาขาวิชา</label>
+            <select id="org_major" style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.9em;font-family:inherit;margin-bottom:11px;">
+              <option value="">— ไม่ระบุสาขาวิชา —</option>
+              <option>ประถมศึกษา</option>
+              <option>การศึกษาปฐมวัย</option>
+              <option>ฟิสิกส์</option>
+              <option>เคมี</option>
+              <option>ชีววิทยา</option>
+              <option>คณิตศาสตร์</option>
+              <option>สังคมศึกษา</option>
+              <option>อุตสาหกรรมศึกษาและการงานอาชีพ</option>
+              <option>พลศึกษา</option>
+              <option>ภาษาอังกฤษ</option>
+              <option>ศิลปศึกษา</option>
+              <option>ดนตรีศึกษา</option>
+              <option>คอมพิวเตอร์และเทคโนโลยีการศึกษา</option>
+              <option>ภาษาไทย</option>
+              <option>ภาษาจีน</option>
+              <option>จิตวิทยาและการแนะแนว</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">ตำแหน่ง</label>
+            <input type="text" id="org_position" placeholder="เช่น นายกสโมสร" list="orgPositionSuggestions">
+            <datalist id="orgPositionSuggestions">
+              <option>นายกสโมสร</option>
+              <option>อุปนายกฝ่ายวิชาการ</option>
+              <option>อุปนายกฝ่ายกิจการ</option>
+              <option>อุปนายกฝ่ายสวัสดิการ</option>
+              <option>อุปนายกฝ่ายสื่อสาร</option>
+              <option>หัวหน้าฝ่าย</option>
+              <option>กรรมการ</option>
+              <option>อาจารย์ที่ปรึกษา</option>
+              <option>เจ้าหน้าที่</option>
+              <option>ที่ปรึกษาพิเศษ</option>
+              <option>อนุสโมสรนักศึกษา</option>
+            </datalist>
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">ฝ่าย <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="org_dept" placeholder="เช่น คณะกรรมการบริหาร" list="orgDeptSuggestions">
+            <datalist id="orgDeptSuggestions">
+              <option>คณะกรรมการบริหาร</option>
+              <option>ฝ่ายสวัสดิการ</option>
+              <option>ฝ่ายสื่อสาร</option>
+              <option>ฝ่ายวิชาการ</option>
+              <option>ฝ่ายกิจกรรม</option>
+              <option>อาจารย์ที่ปรึกษา</option>
+              <option>เจ้าหน้าที่</option>
+              <option>ที่ปรึกษาพิเศษ</option>
+              <option>อนุสโมสรนักศึกษา</option>
+            </datalist>
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">ลำดับในฝ่าย <small style="color:#94a3b8;font-weight:400;">(1 = หัวหน้า)</small></label>
+            <input type="number" id="org_order" placeholder="1, 2, 3..." min="1">
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">สถานะ</label>
+            <select id="org_status" style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.9em;font-family:inherit;margin-bottom:11px;">
+              <option value="แสดง">✅ แสดง</option>
+              <option value="ซ่อน">🔴 ซ่อน</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">เบอร์โทร</label>
+            <input type="text" id="org_phone" placeholder="เช่น 081-234-5678">
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">อีเมล</label>
+            <input type="text" id="org_email" placeholder="เช่น name@cmu.ac.th">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">ห้องทำงาน / สถานที่</label>
+            <input type="text" id="org_office" placeholder="เช่น อาคาร A ห้อง 101 คณะศึกษาศาสตร์">
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">LINE ID</label>
+            <input type="text" id="org_lineId" placeholder="เช่น @smocmu">
+          </div>
+          <div>
+            <label style="font-size:.82em;font-weight:700;display:block;margin-bottom:5px;">URL รูปภาพ</label>
+            <input type="text" id="org_photoUrl" placeholder="https://..." oninput="_previewOrgPhoto(this.value)">
+          </div>
+          <div style="grid-column:1/-1; margin-top:-4px;">
+            <div id="orgPhotoPreview" style="display:none; margin-bottom:8px;">
+              <img id="orgPhotoPreviewImg" src="" alt="preview"
+                style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid #eef5f9;box-shadow:0 2px 8px rgba(0,0,0,.1);">
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <button class="btn btn-details" onclick="closeOrgModal()" style="flex:1;">ยกเลิก</button>
+          <button class="btn btn-submit" style="margin-top:0; flex:2;" id="orgSaveBtn" onclick="doSaveOrgMember()">💾 บันทึก</button>
+        </div>
+        <div id="orgModalAlert" style="display:none; margin-top:12px; padding:10px 14px; border-radius:8px; font-size:.85em;"></div>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการบัญชี Admin ===== -->
+    <div id="page-manage-accounts" class="card">
+      <div class="admin-topbar" >
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <h3 class="page-title" style="margin:0;">👤 จัดการบัญชี Admin</h3>
+      </div>
+      <div style="max-width:800px; margin:0 auto;">
+
+        <!-- Role Guide -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:24px; max-width:480px;">
+          <div style="background:#f5f3ff; border:1.5px solid #c4b5fd; border-radius:14px; padding:16px 20px;">
+            <div style="font-size:1.4em;">👑</div>
+            <div style="font-weight:700; color:#6d28d9; margin-top:4px;">Superadmin</div>
+            <div style="font-size:0.8em; color:#7c3aed; margin-top:4px; line-height:1.5;">เข้าถึงได้ทุกเมนู รวมถึงตั้งค่าเชิงลึก เช่น ตั้งค่าอีเมล, LINE, Audit Log</div>
+          </div>
+          <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:14px; padding:16px 20px;">
+            <div style="font-size:1.4em;">🛠️</div>
+            <div style="font-weight:700; color:#1d4ed8; margin-top:4px;">Admin</div>
+            <div style="font-size:0.8em; color:#2563eb; margin-top:4px; line-height:1.5;">เข้าถึงเมนูงานประจำได้ทั้งหมด แต่ไม่สามารถเข้าตั้งค่าเชิงลึกของระบบได้</div>
+          </div>
+        </div>
+
+        <!-- เพิ่มบัญชีใหม่ -->
+        <div class="equip-section" style="margin-bottom:20px;">
+          <h4>➕ เพิ่มบัญชี Admin ใหม่</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>Username *</label><input type="text" id="acc_user" placeholder="เช่น equipment01"></div>
+            <div class="form-group"><label>Password *</label><input type="password" id="acc_pass" placeholder="รหัสผ่าน"></div>
+            <div class="form-group"><label>ชื่อ-นามสกุล *</label><input type="text" id="acc_name" placeholder="เช่น สมชาย ใจดี"></div>
+            <div class="form-group">
+              <label>บทบาท *</label>
+              <select id="acc_role" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:0.9em;">
+                <option value="superadmin">👑 Superadmin</option>
+                <option value="admin" selected>🛠️ Admin</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="doAddAdminAccount()"
+            style="padding:10px 24px; background:linear-gradient(135deg,#6d28d9,#8b5cf6); color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.9em; margin-top:6px;">
+            ➕ เพิ่มบัญชี
+          </button>
+        </div>
+
+        <!-- รายชื่อบัญชีทั้งหมด -->
+        <div class="equip-section">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+            <h4 style="margin:0;">📋 บัญชี Admin ทั้งหมด</h4>
+            <button onclick="loadAdminAccounts()" style="background:#f1f5f9; color:#475569; border:none; border-radius:8px; padding:7px 14px; cursor:pointer; font-size:0.83em;">🔄 รีเฟรช</button>
+          </div>
+          <div id="adminAccountList"><div style="color:#94a3b8; font-size:0.88em; padding:12px 0;">⏳ กำลังโหลด...</div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Edit Account Modal -->
+    <div id="editAccountModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+      <div class="modal-content" style="max-width:480px;">
+        <button class="close-btn" onclick="document.getElementById('editAccountModal').style.display='none'">✖</button>
+        <h3 style="margin-top:0; color:var(--dark-blue);">✏️ แก้ไขบัญชี Admin</h3>
+        <input type="hidden" id="edit_acc_row">
+        <div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" id="edit_acc_name"></div>
+        <div class="form-group">
+          <label>บทบาท</label>
+          <select id="edit_acc_role" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:0.9em;">
+            <option value="superadmin">👑 Superadmin</option>
+            <option value="admin">🛠️ Admin</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Password ใหม่ <small style="color:#94a3b8;">(เว้นว่างถ้าไม่เปลี่ยน)</small></label><input type="password" id="edit_acc_pass" placeholder="ใส่เฉพาะเมื่อต้องการเปลี่ยน"></div>
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn btn-details" onclick="document.getElementById('editAccountModal').style.display='none'">ยกเลิก</button>
+          <button class="btn btn-submit" style="margin-top:0;" onclick="doUpdateAdminAccount()">💾 บันทึก</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการ LINE Admin ===== -->
+    <div id="page-manage-line-admins" class="card">
+      <div class="admin-topbar" >
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <h3 class="page-title" style="margin:0;">🔔 จัดการ LINE Admin</h3>
+      </div>
+      <div style="max-width:700px; margin:0 auto;">
+
+        <!-- คำอธิบาย -->
+        <div style="background:#ecfdf5; border:1.5px solid #6ee7b7; border-radius:14px; padding:16px 20px; margin-bottom:24px; font-size:0.88em; color:#065f46; line-height:1.7;">
+          <b>📌 LINE Admin คือใคร?</b><br>
+          คือบัญชี LINE ที่จะ<b>ได้รับการแจ้งเตือนทุกรายการ</b> (ยืม/จอง/ออเดอร์/ข้อความ) แบบ Real-time<br>
+          หาก UID ของคุณยังไม่ทราบ → ให้ <b>ส่งข้อความใดก็ได้</b> มาที่ LINE OA ของชมรม ระบบจะบันทึก UID ไว้ใน <b>LINE Users</b> อัตโนมัติ
+        </div>
+
+        <!-- เพิ่ม Admin ใหม่ -->
+        <div class="equip-section" style="margin-bottom:20px;">
+          <h4>➕ เพิ่ม LINE Admin ใหม่</h4>
+          <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap;">
+            <div style="flex:1; min-width:220px;">
+              <label style="font-size:0.82em; font-weight:600; color:#374151; display:block; margin-bottom:6px;">LINE User ID <span style="color:#ef4444;">*</span></label>
+              <input type="text" id="newLineAdminUid" placeholder="Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                style="width:100%; padding:10px 14px; border:1.5px solid #d1fae5; border-radius:10px; font-size:0.9em; box-sizing:border-box;">
+            </div>
+            <div style="min-width:180px;">
+              <label style="font-size:0.82em; font-weight:600; color:#374151; display:block; margin-bottom:6px;">รับแจ้งเตือนระบบ</label>
+              <select id="newLineAdminScope" style="width:100%; padding:10px 14px; border:1.5px solid #d1fae5; border-radius:10px; font-size:0.9em;">
+                <option value="both">🔔 ทั้งหมด (Media + SMO)</option>
+                <option value="media">📹 สื่อสร้างสรรค์เท่านั้น</option>
+                <option value="samo">🏫 SMO เท่านั้น</option>
+              </select>
+            </div>
+            <div style="padding-top:24px;">
+              <button onclick="doAddLineAdmin()"
+                style="padding:10px 22px; background:linear-gradient(135deg,#059669,#10b981); color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.88em; white-space:nowrap;">
+                ➕ เพิ่ม Admin
+              </button>
+            </div>
+          </div>
+          <div style="margin-top:10px; font-size:0.8em; color:#6b7280;">
+            💡 หรือค้นหาจาก LINE Users ที่ลงทะเบียนแล้ว:
+            <button onclick="loadLineUserPicker()" style="margin-left:6px; background:none; border:1px solid #d1d5db; border-radius:6px; padding:4px 10px; cursor:pointer; font-size:0.82em; color:#374151;">🔄 โหลด</button>
+            <div style="position:relative; margin-top:8px;" id="linePickerWrap">
+              <input type="text" id="lineUserSearch" placeholder="🔍 ค้นหาชื่อ, รหัสนักศึกษา, LINE UID..."
+                autocomplete="off"
+                oninput="filterLineUserPicker(this.value)"
+                onfocus="document.getElementById('linePickerDropdown').style.display='block'"
+                style="width:100%; padding:9px 14px; border:1.5px solid #d1d5db; border-radius:10px; font-size:0.88em; box-sizing:border-box;">
+              <div id="linePickerDropdown"
+                style="display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; background:white;
+                  border:1.5px solid #d1d5db; border-radius:10px; max-height:220px; overflow-y:auto;
+                  box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:999;">
+                <div id="linePickerList" style="padding:4px 0;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- รายชื่อ Admin ปัจจุบัน -->
+        <div class="equip-section">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+            <h4 style="margin:0;">📋 รายชื่อ LINE Admin ปัจจุบัน</h4>
+            <button onclick="loadLineAdmins()" style="background:#f1f5f9; color:#475569; border:none; border-radius:8px; padding:7px 14px; cursor:pointer; font-size:0.83em;">🔄 รีเฟรช</button>
+          </div>
+          <div id="lineAdminList"><div style="color:#94a3b8; font-size:0.88em; padding:12px 0;">⏳ กำลังโหลด...</div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการ LINE Users ===== -->
+    <!-- ===== หน้าจัดการข้อความ LINE Bot ===== -->
+    <div id="page-manage-line-templates" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">💬 ข้อความ LINE Bot</span>
+        <span class="topbar-badge">LINE Templates</span>
+        <button onclick="resetAllTpl()" style="margin-left:auto;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:0.8em;font-weight:700;">🔄 รีเซ็ตทั้งหมด</button>
+      </div>
+
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:0.87em;color:#92400e;">
+        💡 แก้ไขข้อความที่ LINE Bot ส่งให้ผู้ใช้ได้เลยโดยไม่ต้องแตะโค้ด — บันทึกแล้วมีผลทันที<br>
+        ตัวแปรที่ใช้ได้จะแสดงใต้แต่ละช่อง เช่น <code style="background:#fef3c7;padding:1px 5px;border-radius:4px;">{name}</code> จะถูกแทนด้วยชื่อจริง
+      </div>
+
+      <div id="tplLoadingMsg" style="text-align:center;padding:30px;color:#94a3b8;">⏳ กำลังโหลด...</div>
+      <div id="tplGroupsWrap" style="display:none;"></div>
+
+      <div style="margin-top:20px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;" id="tplSaveRow" style="display:none;">
+        <button onclick="saveAllTpl()" style="background:linear-gradient(135deg,#c2410c,#ea580c);color:white;border:none;border-radius:10px;padding:11px 28px;font-family:inherit;font-size:0.95em;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(194,65,12,0.3);">
+          💾 บันทึกทั้งหมด
+        </button>
+      </div>
+    </div>
+
+    <div id="page-manage-line-users" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">💬 LINE Users</span>
+        <span class="topbar-badge">ผู้ลงทะเบียน LINE</span>
+      </div>
+      <div style="max-width:780px; margin:0 auto;">
+
+        <!-- Webhook setup guide -->
+        <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:0.85em; color:#166534; line-height:1.8;">
+          <b>📌 ขั้นตอนเชื่อมต่อ LINE Messaging API (ทำครั้งเดียว)</b><br>
+          1. เข้า <a href="https://developers.line.biz" target="_blank" style="color:#166534;">developers.line.biz</a> → สร้าง Messaging API Channel → เลือก LINE OA ที่มีอยู่<br>
+          2. คัดลอก <b>Channel Access Token</b> → ไปวางแทน LINE_TOKEN ใน Code.gs บรรทัดที่ 12<br>
+          3. Deploy Web App → คัดลอก URL → วางใน <b>Webhook URL</b> ของ LINE Developers<br>
+          4. เปิด <b>Use webhook</b> / ปิด Auto-reply / ปิด Greeting message<br>
+          5. ผู้ใช้ Add เพื่อน LINE OA แล้วส่งรหัสนักศึกษา → ลงทะเบียนอัตโนมัติ
+        </div>
+
+        <!-- Webapp URL setting -->
+        <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:12px; padding:14px 18px; margin-bottom:20px;">
+          <div style="font-size:0.85em; font-weight:700; color:#1e40af; margin-bottom:10px;">🔗 ตั้งค่า URL เว็บระบบ (สำหรับแสดงใน LINE)</div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="webAppUrlInput" placeholder="https://script.google.com/macros/s/.../exec"
+              style="flex:1; margin:0; font-size:0.85em; font-family:monospace;">
+            <button onclick="saveWebAppUrl()" style="background:#1d4ed8; color:white; border:none; border-radius:8px; padding:8px 16px; cursor:pointer; font-size:0.85em; font-weight:700; white-space:nowrap;">บันทึก</button>
+          </div>
+          <div style="font-size:0.78em; color:#64748b; margin-top:6px;">URL นี้จะแสดงใน LINE เมื่อผู้ใช้กดเมนู "ยืมของ" หรือ "จองห้อง"</div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;">
+          <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:12px 18px; text-align:center; min-width:120px;">
+            <div style="font-size:1.8em; font-weight:700; color:#166534;" id="lineUserCount">—</div>
+            <div style="font-size:0.8em; color:#64748b;">ผู้ลงทะเบียนแล้ว</div>
+          </div>
+          <div style="flex:1; display:flex; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap;">
+            <button onclick="loadLineUsers()" style="background:#f1f5f9; color:#475569; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:0.85em;">🔄 รีเฟรช</button>
+            <button onclick="testLineNotify()" style="background:#f0fdf4; color:#166534; border:1.5px solid #86efac; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:0.85em; font-weight:700;">🧪 ทดสอบส่ง LINE</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>รหัสนักศึกษา/บุคลากร</th>
+                <th>LINE User ID</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>เบอร์โทร</th>
+                <th>วันที่ลงทะเบียน</th>
+                <th style="text-align:center;">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="lineUsersBody">
+              <tr><td colspan="6" style="text-align:center; padding:28px; color:#94a3b8;">กำลังโหลด...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="lineUsersCount" style="font-size:0.82em; color:#94a3b8; margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <!-- ===== หน้าตั้งค่าแจ้งเตือนเกินกำหนด ===== -->
+    <div id="page-overdue-settings" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">⏰ แจ้งเตือนเกินกำหนดคืน</span>
+        <span class="topbar-badge">Overdue Notifications</span>
+      </div>
+      <div style="max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:18px;">
+
+        <!-- Status Banner -->
+        <div id="overdueBanner" style="padding:14px 18px; border-radius:12px; font-size:0.88em; line-height:1.6; background:#f1f5f9; border:1px solid #e2e8f0; color:#475569;">
+          ⏳ กำลังโหลด...
+        </div>
+
+        <!-- Settings Form -->
+        <div class="admin-form-box">
+          <h4 style="margin:0 0 16px; color:var(--dark-blue);">⚙️ ตั้งค่าการแจ้งเตือน</h4>
+
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; padding:12px 16px; background:#f0fdf4; border:1px solid #86efac; border-radius:10px;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.92em; font-weight:700;">
+              <input type="checkbox" id="overdueEnabled" style="transform:scale(1.3);">
+              <span>เปิดใช้งานการแจ้งเตือนอัตโนมัติ (รันทุกวัน 08:00 น.)</span>
+            </label>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+            <div class="fg">
+              <label>ส่งแจ้งเตือนเมื่อ (วันก่อน/หลังกำหนด)</label>
+              <input type="text" id="overdueReminderDays" placeholder="เช่น -1,0,1,3,7" style="font-family:monospace;">
+              <div style="font-size:0.75em; color:#94a3b8; margin-top:3px;">
+                ลบ = ก่อนถึงกำหนด | 0 = วันครบกำหนด | บวก = เกินกำหนด
+              </div>
+            </div>
+            <div class="fg">
+              <label>วันผ่อนผัน (grace period)</label>
+              <input type="number" id="overdueGraceDays" placeholder="0" min="0" max="30">
+              <div style="font-size:0.75em; color:#94a3b8; margin-top:3px;">เริ่มนับหลังกำหนดคืน N วัน</div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:16px;">
+            <label style="display:flex; align-items:center; gap:7px; cursor:pointer; font-size:0.9em;">
+              <input type="checkbox" id="overdueSendLine" style="transform:scale(1.2);">
+              <span>ส่งแจ้งเตือนผ่าน <b>LINE</b></span>
+            </label>
+            <label style="display:flex; align-items:center; gap:7px; cursor:pointer; font-size:0.9em;">
+              <input type="checkbox" id="overdueSendEmail" style="transform:scale(1.2);">
+              <span>ส่งแจ้งเตือนผ่าน <b>Email</b></span>
+            </label>
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button onclick="saveOverdueSettingsUI()" class="btn btn-submit" style="max-width:160px; margin:0;">💾 บันทึก</button>
+            <button onclick="setupOverdueTriggerUI()" style="background:#f0fdf4; color:#166534; border:1.5px solid #86efac; border-radius:10px; padding:10px 18px; cursor:pointer; font-size:0.88em; font-weight:700;" id="btnSetupTrigger">🕐 ตั้งค่า Trigger</button>
+            <button onclick="deleteOverdueTriggerUI()" style="background:#fef2f2; color:#dc2626; border:1.5px solid #fca5a5; border-radius:10px; padding:10px 16px; cursor:pointer; font-size:0.88em;">✕ ลบ Trigger</button>
+          </div>
+        </div>
+
+        <!-- Overdue List + Manual Run -->
+        <div class="admin-form-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+            <h4 style="margin:0; color:var(--dark-blue);">📋 รายการปัจจุบัน</h4>
+            <div style="display:flex; gap:8px;">
+              <button onclick="loadOverdueList()" style="background:#f1f5f9; color:#475569; border:none; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:0.85em;">🔄 รีเฟรช</button>
+              <button onclick="runOverdueNow(true)" style="background:#fffbeb; color:#92400e; border:1.5px solid #fde68a; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:0.85em; font-weight:700;">👁️ Preview</button>
+              <button onclick="runOverdueNow(false)" class="btn btn-submit" style="max-width:none; width:auto; margin:0; padding:8px 16px; font-size:0.85em;">📨 ส่งแจ้งเตือนเดี๋ยวนี้</button>
+            </div>
+          </div>
+          <div id="overdueListWrap">
+            <div style="text-align:center; padding:24px; color:#94a3b8; font-size:0.88em;">กดรีเฟรชเพื่อดูรายการ</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== หน้า Audit Log ===== -->
+    <div id="page-audit-log" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">📋 ประวัติการแก้ไขสถานะ</span>
+        <span class="topbar-badge">Audit Log</span>
+      </div>
+
+      <!-- Filter bar -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+        <div style="flex:1; min-width:140px;">
+          <label style="font-size:0.78em; color:#64748b; display:block; margin-bottom:4px;">ประเภท</label>
+          <select id="auditFilterType" style="margin:0; padding:8px 10px; font-size:0.88em;">
+            <option value="">ทั้งหมด</option>
+            <option value="ออเดอร์">📦 ออเดอร์</option>
+            <option value="ยืมอุปกรณ์">💻 ยืมอุปกรณ์</option>
+            <option value="จองห้อง">🏫 จองห้อง</option>
+          </select>
+        </div>
+        <div style="flex:1; min-width:140px;">
+          <label style="font-size:0.78em; color:#64748b; display:block; margin-bottom:4px;">Admin</label>
+          <input type="text" id="auditFilterAdmin" placeholder="ชื่อ Admin..." style="margin:0; padding:8px 10px; font-size:0.88em;">
+        </div>
+        <div style="flex:1; min-width:140px;">
+          <label style="font-size:0.78em; color:#64748b; display:block; margin-bottom:4px;">ค้นหา (รหัส / ชื่อ)</label>
+          <input type="text" id="auditFilterKeyword" placeholder="พิมพ์เพื่อค้นหา..." style="margin:0; padding:8px 10px; font-size:0.88em;">
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button onclick="loadAuditLog()" class="btn btn-submit" style="margin:0; padding:9px 18px; font-size:0.88em; max-width:none; width:auto;">🔍 กรอง</button>
+          <button onclick="clearAuditFilter()" style="background:#f1f5f9; color:#475569; border:none; border-radius:8px; padding:9px 14px; cursor:pointer; font-size:0.88em;">✕ ล้าง</button>
+        </div>
+      </div>
+
+      <!-- Summary chips -->
+      <div id="auditSummaryRow" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;"></div>
+
+      <!-- Table -->
+      <div class="admin-table-container">
+        <table class="admin-table" id="auditLogTable">
+          <thead>
+            <tr>
+              <th style="min-width:140px;">เวลา</th>
+              <th>ประเภท</th>
+              <th>รหัสรายการ</th>
+              <th>ชื่อ</th>
+              <th>สถานะเดิม</th>
+              <th>สถานะใหม่</th>
+              <th>Admin</th>
+              <th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody id="auditLogBody">
+            <tr><td colspan="8" style="text-align:center; padding:32px; color:#94a3b8;">กำลังโหลด...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="auditLogCount" style="font-size:0.82em; color:#94a3b8; margin-top:8px; text-align:right;"></div>
+    </div>
+
+    <!-- ===== หน้า QR Scanner (Admin) ===== -->
+    <div id="page-qr-scanner" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="stopQrScanner(); showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">📷 QR Scanner</span>
+        <span class="topbar-badge">รับ / คืน อุปกรณ์</span>
+      </div>
+
+      <div class="scanner-wrap">
+
+        <!-- Camera viewfinder -->
+        <div id="scannerViewBox" class="scanner-viewfinder" style="display:none;">
+          <video id="qrVideo" autoplay playsinline muted></video>
+          <div class="scanner-overlay">
+            <div class="scanner-frame">
+              <div class="scanner-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start button -->
+        <div id="scannerStartBox" style="text-align:center; padding:32px 16px; border:1.5px dashed #c7d2fe; border-radius:16px; background:#fafbff;">
+          <div style="font-size:3em; margin-bottom:12px;">📷</div>
+          <div style="font-weight:700; color:var(--dark-blue); margin-bottom:6px;">เปิดกล้องเพื่อสแกน QR</div>
+          <div style="font-size:0.85em; color:#64748b; margin-bottom:18px;">ใช้สำหรับยืนยันรับ / คืน อุปกรณ์</div>
+          <button onclick="startQrScanner()" class="btn btn-submit" style="max-width:200px; margin:0 auto;">📷 เปิดกล้อง</button>
+        </div>
+
+        <!-- Status while scanning -->
+        <div id="scannerStatus" style="display:none; text-align:center; margin-top:12px; font-size:0.85em; color:#64748b;">
+          🔍 กำลังสแกน... เล็งกล้องไปที่ QR Code
+          <br><button onclick="stopQrScanner()" style="margin-top:10px; background:#fef2f2; color:#dc2626; border:1.5px solid #fca5a5; border-radius:8px; padding:7px 18px; cursor:pointer; font-size:0.85em; font-weight:700;">■ หยุดสแกน</button>
+        </div>
+
+        <!-- OR manual input -->
+        <div style="margin-top:18px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <div style="flex:1; height:1px; background:#e2e8f0;"></div>
+            <span style="font-size:0.78em; color:#94a3b8; white-space:nowrap;">หรือพิมพ์รหัสคำขอเอง</span>
+            <div style="flex:1; height:1px; background:#e2e8f0;"></div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="manualQrInput" placeholder="รหัสคำขอ เช่น edurent001"
+              style="flex:1; margin:0; font-family:monospace;"
+              onkeydown="if(event.key==='Enter') lookupQrManual()">
+            <button onclick="lookupQrManual()" class="btn btn-submit"
+              style="width:auto; padding:0 18px; margin:0; flex-shrink:0;">ค้นหา</button>
+          </div>
+        </div>
+
+        <!-- Result card -->
+        <div id="qrResultCard" style="display:none; margin-top:20px;"></div>
+
+      </div>
+    </div>
+
+    <!-- ===== Admin: กล่องข้อความ (Contact Messages Inbox) ===== -->
+    <div id="page-manage-messages" class="card">
+      <div class="admin-topbar">
+        <button class="admin-back-btn" onclick="openAdminSubPage('admin-dashboard')">← กลับ Dashboard</button>
+        <h3 class="page-title" style="margin:0;">📨 กล่องข้อความจากผู้ใช้</h3>
+      </div>
+
+      <!-- Filter + Search Bar -->
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:20px;">
+        <div class="msg-filter-bar" id="msgFilterBar">
+          <button class="msg-filter-btn active" data-status="all" onclick="setMsgFilter('all', this)">ทั้งหมด <span class="msg-count-chip" id="msgCnt_all">—</span></button>
+          <button class="msg-filter-btn" data-status="ใหม่" onclick="setMsgFilter('ใหม่', this)">🟡 ใหม่ <span class="msg-count-chip" id="msgCnt_new">—</span></button>
+          <button class="msg-filter-btn" data-status="อ่านแล้ว" onclick="setMsgFilter('อ่านแล้ว', this)">🔵 อ่านแล้ว <span class="msg-count-chip" id="msgCnt_read">—</span></button>
+          <button class="msg-filter-btn" data-status="ตอบแล้ว" onclick="setMsgFilter('ตอบแล้ว', this)">🟢 ตอบแล้ว <span class="msg-count-chip" id="msgCnt_done">—</span></button>
+        </div>
+        <input type="text" id="msgSearchInput" placeholder="🔍 ค้นหาชื่อ / เบอร์ / ข้อความ..."
+          oninput="renderContactMessages()"
+          style="max-width:260px; margin:0; flex-shrink:0;">
+        <button class="btn btn-submit" onclick="loadContactMessages()" style="margin:0; padding:9px 18px; font-size:0.85em;">🔄 รีเฟรช</button>
+      </div>
+
+      <div id="msgInboxContainer">
+        <div class="msg-empty"><div class="msg-empty-icon">📭</div><p>กำลังโหลดข้อมูล...</p></div>
+      </div>
+    </div><!-- /page-manage-messages -->
+
+    <!-- ===== Admin: จัดการ FAQ ===== -->
+    <div id="page-manage-faq" class="card">
+      <div class="admin-topbar">
+        <button class="admin-back-btn" onclick="openAdminSubPage('admin-dashboard')">← กลับ Dashboard</button>
+        <h3 class="page-title" style="margin:0;">❓ จัดการ FAQ</h3>
+      </div>
+
+      <!-- ฟอร์มเพิ่ม/แก้ไข -->
+      <div style="background:#f8faff; border:1px solid #e0e7ff; border-radius:12px; padding:18px; margin-bottom:20px;">
+        <h4 style="margin:0 0 14px; color:var(--dark-blue); font-size:0.95em;" id="faqAdminFormTitle">➕ เพิ่มคำถามใหม่</h4>
+        <input type="hidden" id="faqEditIndex" value="-1">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="font-size:0.8em; color:var(--text-muted); font-weight:600;">หมวดหมู่</label>
+            <select id="faqAdminCat" style="width:100%; margin-top:4px;">
+              <option value="borrow">🎥 ยืมอุปกรณ์</option>
+              <option value="booking">🏫 จองห้อง</option>
+              <option value="order">🛒 สั่งซื้อสินค้า</option>
+              <option value="general">💬 ทั่วไป</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8em; color:var(--text-muted); font-weight:600;">ลำดับการแสดง (ตัวเลข)</label>
+            <input type="number" id="faqAdminOrder" placeholder="0" min="0" style="margin-top:4px;">
+          </div>
+        </div>
+        <label style="font-size:0.8em; color:var(--text-muted); font-weight:600;">คำถาม *</label>
+        <input type="text" id="faqAdminQ" placeholder="พิมพ์คำถาม..." style="margin:4px 0 10px;">
+        <label style="font-size:0.8em; color:var(--text-muted); font-weight:600;">คำตอบ * (รองรับ HTML เช่น &lt;b&gt;ตัวหนา&lt;/b&gt;)</label>
+        <textarea id="faqAdminA" placeholder="พิมพ์คำตอบ..." rows="3" style="width:100%; padding:10px 12px; border:1px solid #dde2ed; border-radius:10px; font-size:0.88em; font-family:inherit; resize:vertical; margin:4px 0 14px;"></textarea>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-submit" onclick="saveFaqAdmin()" style="flex:1;">💾 บันทึก</button>
+          <button class="btn" onclick="clearFaqAdminForm()" style="background:white; color:var(--text-muted); border:1px solid #dde2ed;">ยกเลิก</button>
+        </div>
+      </div>
+
+      <!-- ตารางรายการ FAQ -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <input type="text" id="faqAdminSearch" placeholder="🔍 ค้นหาคำถาม..." oninput="renderFaqAdminTable()" style="max-width:280px; margin:0;">
+        <select id="faqAdminFilter" onchange="renderFaqAdminTable()" style="max-width:180px; margin:0;">
+          <option value="all">ทุกหมวดหมู่</option>
+          <option value="borrow">🎥 ยืมอุปกรณ์</option>
+          <option value="booking">🏫 จองห้อง</option>
+          <option value="order">🛒 สั่งซื้อสินค้า</option>
+          <option value="general">💬 ทั่วไป</option>
+        </select>
+      </div>
+      <div id="faqAdminTable"></div>
+    </div>
+
+    <!-- ===== หน้าจัดการสไลด์หน้าหลัก ===== -->
+    <div id="page-manage-slides" class="card">
+      <div class="admin-topbar">
+        <button class="admin-back-btn" onclick="openAdminSubPage('admin-dashboard')">← กลับ Dashboard</button>
+        <h3 class="page-title" style="margin:0">🖼️ จัดการรูปสไลด์หน้าหลัก</h3>
+      </div>
+      <div class="admin-form-box" style="max-width:700px; margin: 0 auto 28px;">
+        <h4 style="margin-top:0; color:var(--dark-blue); font-size:0.95em; border-bottom:1px solid #e8edf5; padding-bottom:10px;">
+          ➕ เพิ่ม / แก้ไขสไลด์
+        </h4>
+        <input type="hidden" id="slideEditRow">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group" style="grid-column:1/-1;">
+            <label>URL รูปภาพ <span style="color:#e53e3e">*</span>
+              <span style="font-size:0.78em; color:#6b7fa3; font-weight:400;">(Google Drive: share → copy link → วางที่นี่ได้เลย)</span>
+            </label>
+            <input type="text" id="slideImgUrl" placeholder="https://drive.google.com/file/d/.../view หรือ https://lh3...">
+          </div>
+          <div class="form-group">
+            <label>หัวข้อ (แสดงบนรูป)</label>
+            <input type="text" id="slideTitle" placeholder="เช่น สโมสรนักศึกษา คณะศึกษาศาสตร์">
+          </div>
+          <div class="form-group">
+            <label>คำอธิบาย (แสดงบนรูป)</label>
+            <input type="text" id="slideCaption" placeholder="เช่น สโมสรนักศึกษา คณะศึกษาศาสตร์">
+          </div>
+          <div class="form-group">
+            <label>ลำดับ</label>
+            <input type="number" id="slideOrder" placeholder="1" style="max-width:100px;">
+          </div>
+          <div class="form-group" style="display:flex; align-items:center; gap:10px; padding-top:22px;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin:0; font-weight:600;">
+              <input type="checkbox" id="slideActive" checked style="width:auto; margin:0; transform:scale(1.3);">
+              แสดงสไลด์นี้
+            </label>
+          </div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:10px;">
+          <button class="btn btn-submit" style="max-width:200px; margin:0;" onclick="saveSlide()">💾 บันทึกสไลด์</button>
+          <button class="btn btn-details" style="max-width:140px; margin:0;" onclick="clearSlideForm()">ล้างฟอร์ม</button>
+        </div>
+      </div>
+      <div class="admin-table-container" style="max-width:700px; margin:0 auto;">
+        <div id="slidesTableWrap">
+          <div style="text-align:center; color:#94a3b8; padding:30px;">⏳ กำลังโหลด...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== หน้าปฏิทินอุปกรณ์ (Admin) ===== -->
+    <div id="page-equip-calendar" class="card">
+      <div class="admin-topbar">
+        <button class="admin-back-btn" onclick="openAdminSubPage('admin-dashboard')">← กลับ Dashboard</button>
+        <h3 class="page-title" style="margin:0">📅 ปฏิทินอุปกรณ์</h3>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="eqcal-toolbar">
+        <div class="eqcal-month-nav">
+          <button class="eqcal-month-btn" onclick="eqCalPrevMonth()">&#8249;</button>
+          <div class="eqcal-month-label" id="eqCalMonthLabel">—</div>
+          <button class="eqcal-month-btn" onclick="eqCalNextMonth()">&#8250;</button>
+        </div>
+        <input class="eqcal-search" type="text" id="eqCalSearch" placeholder="🔍 ค้นหาชื่ออุปกรณ์..." oninput="renderEquipCalendar()">
+        <button class="btn btn-details" style="width:auto;padding:8px 16px;" onclick="eqCalToday()">วันนี้</button>
+        <div class="eqcal-legend">
+          <label class="eqcal-toggle-wrap">
+            <input type="checkbox" id="eqCalShowPending" onchange="renderEquipCalendar()">
+            <span class="eqcal-legend-dot" style="background:#f59e0b"></span> รออนุมัติ
+          </label>
+          <label class="eqcal-toggle-wrap">
+            <input type="checkbox" id="eqCalShowApproved" onchange="renderEquipCalendar()">
+            <span class="eqcal-legend-dot" style="background:#1976d2"></span> อนุมัติแล้ว
+          </label>
+          <label class="eqcal-toggle-wrap" style="border-color:var(--primary);background:#eff6ff;">
+            <input type="checkbox" id="eqCalShowBorrowing" checked onchange="renderEquipCalendar()">
+            <span class="eqcal-legend-dot" style="background:#7c3aed"></span> กำลังยืม ✓
+          </label>
+          <label class="eqcal-toggle-wrap">
+            <input type="checkbox" id="eqCalShowReturned" onchange="renderEquipCalendar()">
+            <span class="eqcal-legend-dot" style="background:#16a34a"></span> คืนแล้ว
+          </label>
+          <label class="eqcal-toggle-wrap">
+            <input type="checkbox" id="eqCalShowCancelled" onchange="renderEquipCalendar()">
+            <span class="eqcal-legend-dot" style="background:#94a3b8;opacity:.65;"></span> ยกเลิก/ปฏิเสธ
+          </label>
+        </div>
+      </div>
+
+      <!-- Summary chips -->
+      <div id="eqCalSummary" style="margin-bottom:12px; display:flex; gap:8px; flex-wrap:wrap;"></div>
+
+      <!-- Calendar grid -->
+      <div style="overflow-x:auto;">
+        <div class="eqcal-grid" id="eqCalGrid"></div>
+      </div>
+    </div>
+
+    <!-- Modal รายละเอียดผู้ยืม (popup เมื่อคลิก bar) -->
+    <div class="modal-overlay" id="eqCalDetailModal" onclick="if(event.target===this)this.style.display='none'">
+      <div class="modal-content" style="max-width:500px;">
+        <button class="close-btn" onclick="document.getElementById('eqCalDetailModal').style.display='none'">✕</button>
+        <div id="eqCalDetailContent"></div>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการออเดอร์ ===== -->
+    <!-- ===== หน้าจุดรับสินค้า ===== -->
+    <div id="page-pickup-counter" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">🏪 จุดรับสินค้า</span>
+        <span class="topbar-badge">Pickup Counter</span>
+      </div>
+
+      <!-- Source Tabs -->
+      <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+        <button id="pickupTab_orders" onclick="switchPickupSource('orders')"
+          style="flex:1;min-width:120px;padding:10px 14px;border-radius:10px;border:2px solid var(--primary);background:var(--primary);color:white;font-family:inherit;font-weight:700;font-size:0.9em;cursor:pointer;transition:0.2s;">
+          📦 ออเดอร์ทั่วไป
+        </button>
+        <button id="pickupTab_jersey" onclick="switchPickupSource('jersey')"
+          style="flex:1;min-width:120px;padding:10px 14px;border-radius:10px;border:2px solid #e2e8f0;background:white;color:#64748b;font-family:inherit;font-weight:700;font-size:0.9em;cursor:pointer;transition:0.2s;">
+          👕 EDUJERSEY
+        </button>
+        <button id="pickupTab_summary" onclick="switchPickupSource('summary')"
+          style="flex:1;min-width:120px;padding:10px 14px;border-radius:10px;border:2px solid #e2e8f0;background:white;color:#64748b;font-family:inherit;font-weight:700;font-size:0.9em;cursor:pointer;transition:0.2s;">
+          📊 สรุปภาพรวม
+        </button>
+        <button id="pickupTab_history" onclick="switchPickupSource('history')"
+          style="flex:1;min-width:120px;padding:10px 14px;border-radius:10px;border:2px solid #e2e8f0;background:white;color:#64748b;font-family:inherit;font-weight:700;font-size:0.9em;cursor:pointer;transition:0.2s;">
+          🕒 ประวัติล่าสุด
+        </button>
+      </div>
+
+      <!-- ========== SUMMARY PANEL ========== -->
+      <div id="pickupSummaryPanel" style="display:none;">
+        
+        <!-- แถบตัวกรองที่เพิ่มใหม่ -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 16px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span style="font-weight:700; color:var(--text); font-size:0.92em;">ฟิลเตอร์:</span>
+            <select id="sumFilterSize" onchange="renderSummary(summaryData)" style="padding:6px 10px; border-radius:8px; border:1px solid #cbd5e1; font-family:inherit; font-size:0.85em; cursor:pointer;">
+              <option value="all">👕 ทุกไซส์</option>
+            </select>
+            <select id="sumFilterShipping" onchange="renderSummary(summaryData)" style="padding:6px 10px; border-radius:8px; border:1px solid #cbd5e1; font-family:inherit; font-size:0.85em; cursor:pointer;">
+              <option value="all">🚚 การรับ (ทั้งหมด)</option>
+              <option value="pickup">🏫 รับเองที่สโมสร</option>
+              <option value="postal">📮 ส่งไปรษณีย์</option>
+            </select>
+            <button onclick="loadPickupSummary()" style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:inherit;font-size:0.85em;font-weight:600;color:#475569;margin-left:auto;">🔄 รีเฟรช</button>
+          </div>
+          <div id="summaryGenFilter" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;"></div>
+        </div>
+
+        <!-- Stats row (รับแล้ว/ยังไม่รับ จะแสดงตรงนี้) -->
+        <div id="summaryStatsRow" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:20px;"></div>
+
+        <!-- Two columns: รับแล้ว / ยังไม่รับ -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <!-- รับแล้ว -->
+          <div style="border:2px solid #86efac; border-radius:14px; overflow:hidden;">
+            <div style="background:linear-gradient(135deg,#14532d,#15803d); color:white; padding:12px 16px; display:flex; align-items:center; gap:8px;">
+              <span style="font-weight:800; font-size:0.95em; flex:1;">✅ รับแล้ว</span>
+              <span id="summaryDoneCount" style="background:rgba(255,255,255,0.25); padding:2px 10px; border-radius:20px; font-size:0.82em; font-weight:700;">0 คน</span>
+            </div>
+            <div id="summaryDoneList" style="max-height:380px; overflow-y:auto; background:#f0fdf4;"></div>
+            <div id="summaryDoneSizes" style="padding:10px 14px; background:#dcfce7; border-top:1px solid #86efac; display:flex; flex-wrap:wrap; gap:6px;"></div>
+          </div>
+          <!-- ยังไม่รับ -->
+          <div style="border:2px solid #fca5a5; border-radius:14px; overflow:hidden;">
+            <div style="background:linear-gradient(135deg,#7f1d1d,#dc2626); color:white; padding:12px 16px; display:flex; align-items:center; gap:8px;">
+              <span style="font-weight:800; font-size:0.95em; flex:1;">⏳ ยังไม่รับ</span>
+              <span id="summaryPendingCount" style="background:rgba(255,255,255,0.25); padding:2px 10px; border-radius:20px; font-size:0.82em; font-weight:700;">0 คน</span>
+            </div>
+            <div id="summaryPendingList" style="max-height:380px; overflow-y:auto; background:#fff5f5;"></div>
+            <div id="summaryPendingSizes" style="padding:10px 14px; background:#fee2e2; border-top:1px solid #fca5a5; display:flex; flex-wrap:wrap; gap:6px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== HISTORY PANEL (เพิ่มใหม่) ========== -->
+      <div id="pickupHistoryPanel" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h4 style="margin:0; color:var(--dark-blue);">🕒 100 รายการแจกเสื้อล่าสุด</h4>
+          <button onclick="loadPickupSummary()" class="btn btn-details" style="width:auto; margin:0; padding:6px 12px;">🔄 โหลดข้อมูลใหม่</button>
+        </div>
+        <div id="pickupHistoryList" style="display:flex; flex-direction:column; gap:10px;"></div>
+      </div>
+
+      <!-- ========== SEARCH PANEL (orders/jersey) ========== -->
+      <div id="pickupSearchPanel">
+        <!-- Search Box -->
+        <div class="pickup-search-wrap">
+          <span class="pickup-search-icon"></span>
+          <input type="text" id="pickupSearchInput" class="pickup-search-input"
+            placeholder="เบอร์โทร / รหัสนักศึกษา / ชื่อ / รหัสออเดอร์..."
+            oninput="onPickupSearch(this.value)" autocomplete="off">
+          <button class="pickup-search-clear" id="pickupClearBtn" onclick="clearPickupSearch()">✕</button>
+        </div>
+
+        <!-- Filter Bar -->
+        <div id="pickupFilterBar" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center; padding:10px 14px; background:#f8fafc; border-radius:12px; border:1px solid #e2e8f0;">
+
+          <!-- สถานะ -->
+          <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
+            <span style="font-size:0.75em; font-weight:700; color:#64748b; white-space:nowrap;">สถานะ:</span>
+            <button class="pickup-filter-chip active" data-ftype="status" data-fval="" onclick="setPickupFilter('status','',this)">ทั้งหมด</button>
+            <button class="pickup-filter-chip" data-ftype="status" data-fval="รอมอบ" onclick="setPickupFilter('status','รอมอบ',this)">⏳ รอมอบ</button>
+            <button class="pickup-filter-chip" data-ftype="status" data-fval="มอบแล้ว" onclick="setPickupFilter('status','มอบแล้ว',this)">✅ มอบแล้ว</button>
+          </div>
+
+          <div style="width:1px;height:24px;background:#cbd5e1;flex-shrink:0;"></div>
+
+          <!-- รับเอง/จัดส่ง — แสดงเฉพาะ jersey -->
+          <div id="pickupShippingFilterWrap" style="display:none; align-items:center; gap:5px; flex-wrap:wrap;">
+            <span style="font-size:0.75em; font-weight:700; color:#64748b; white-space:nowrap;">การรับ:</span>
+            <button class="pickup-filter-chip active" data-ftype="shipping" data-fval="" onclick="setPickupFilter('shipping','',this)">ทั้งหมด</button>
+            <button class="pickup-filter-chip" data-ftype="shipping" data-fval="pickup" onclick="setPickupFilter('shipping','pickup',this)">🏫 รับเอง</button>
+            <button class="pickup-filter-chip" data-ftype="shipping" data-fval="postal" onclick="setPickupFilter('shipping','postal',this)">📮 จัดส่ง</button>
+          </div>
+
+          <div id="pickupShippingDivider" style="display:none; width:1px; height:24px; background:#cbd5e1; flex-shrink:0;"></div>
+
+          <!-- ชั้นปี — แสดงเฉพาะ jersey -->
+          <div id="pickupYearFilterWrap" style="display:none; align-items:center; gap:5px; flex-wrap:wrap;">
+            <span style="font-size:0.75em; font-weight:700; color:#64748b; white-space:nowrap;">ชั้นปี:</span>
+            <button class="pickup-filter-chip active" data-ftype="year" data-fval="" onclick="setPickupFilter('year','',this)">ทั้งหมด</button>
+            <button class="pickup-filter-chip" data-ftype="year" data-fval="68" onclick="setPickupFilter('year','68',this)">ปี 1</button>
+            <button class="pickup-filter-chip" data-ftype="year" data-fval="67" onclick="setPickupFilter('year','67',this)">ปี 2</button>
+            <button class="pickup-filter-chip" data-ftype="year" data-fval="66" onclick="setPickupFilter('year','66',this)">ปี 3</button>
+            <button class="pickup-filter-chip" data-ftype="year" data-fval="65" onclick="setPickupFilter('year','65',this)">ปี 4</button>
+            <button class="pickup-filter-chip" data-ftype="year" data-fval="บุคลากร" onclick="setPickupFilter('year','บุคลากร',this)">บุคลากร</button>
+          </div>
+
+          <div id="pickupYearDivider" style="display:none; width:1px; height:24px; background:#cbd5e1; flex-shrink:0;"></div>
+
+          <!-- สาขาวิชา — dropdown เพราะมีเยอะ -->
+          <div id="pickupMajorFilterWrap" style="display:none; align-items:center; gap:5px;">
+            <span style="font-size:0.75em; font-weight:700; color:#64748b; white-space:nowrap;">สาขา:</span>
+            <select id="pickupMajorSelect" onchange="setPickupFilter('major', this.value, null)"
+              style="padding:5px 10px; border-radius:8px; border:1.5px solid #e2e8f0; font-family:inherit; font-size:0.82em; font-weight:600; color:#334155; background:white; cursor:pointer; max-width:200px;">
+              <option value="">ทุกสาขา</option>
+            </select>
+          </div>
+
+          <!-- Active filter badges + reset -->
+          <button id="pickupFilterResetBtn" onclick="resetPickupFilters()" style="display:none; margin-left:auto; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; border-radius:8px; padding:4px 12px; font-size:0.78em; font-weight:700; cursor:pointer; font-family:inherit; white-space:nowrap;">✕ ล้างตัวกรอง</button>
+        </div>
+
+        <div id="pickupResultsCount" class="pickup-results-count"></div>
+
+        <div id="pickupHint" class="pickup-hint">
+          <span class="hint-icon">🏪</span>
+          <strong>จุดรับสินค้า</strong><br>
+          ค้นหาลูกค้า กด <b>➕ เพิ่มในตะกร้า</b> ได้หลายคน แล้วกดบันทึกทีเดียว<br>
+          <small>รองรับการค้นหาต่อเนื่องโดยไม่สูญเสียรายการที่เลือกไว้</small>
+        </div>
+
+        <div id="pickupResultsList"></div>
+      </div>
+
+      <!-- Cart Panel (fixed bottom) -->
+    </div><!-- end page-pickup-counter -->
+
+    <!-- ===== FLOATING CART (fixed, outside card) ===== -->
+    <div id="pickupCartPanel" style="display:none; position:fixed; bottom:0; left:248px; right:0; z-index:200; box-shadow:0 -8px 30px rgba(245, 158, 11, 0.2); border-radius:24px 24px 0 0; overflow:hidden;">
+
+      <!-- Header bar (always visible, click to toggle) -->
+      <div id="cartHeader" onclick="toggleCart()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:14px 24px; display:flex; align-items:center; gap:12px; cursor:pointer; user-select:none;">
+        <span style="font-size:1em; font-weight:800; flex:1;">🛒 ตะกร้ารอบันทึก</span>
+        <span id="cartCountBadge" style="background:rgba(255,255,255,0.25); padding:3px 12px; border-radius:20px; font-size:0.85em; font-weight:700;">0 รายการ</span>
+        <button onclick="clearCart(); event.stopPropagation();" style="background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:white; border-radius:8px; padding:4px 10px; cursor:pointer; font-family:inherit; font-size:0.8em; font-weight:600; transition:0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">🗑️ ล้าง</button>
+        <span id="cartToggleIcon" style="font-size:1.1em; transition:transform 0.25s; display:inline-block;">▲</span>
+      </div>
+
+      <!-- Expandable body -->
+      <div id="cartBody" style="background:#fffbeb; border-top:1.5px solid #fde68a; max-height:0; overflow:hidden; transition:max-height 0.35s ease;">
+        <!-- ลด max-height ลงเหลือ 150px เพื่อให้ตะกร้าเตี้ยลง ไม่บังจอเยอะ -->
+        <div id="cartItemsList" style="padding:14px 20px; display:flex; flex-wrap:wrap; gap:10px; max-height:150px; overflow-y:auto;"></div>
+        
+        <!-- แถบด้านล่าง ปรับ Flex ให้ปุ่มแชร์พื้นที่กัน ไม่ตกขอบ -->
+        <div style="padding:14px 20px; background:#fef3c7; border-top:1px solid #fde68a; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-weight:700; color:#92400e; font-size:0.88em; white-space:nowrap;">เปลี่ยนสถานะทั้งหมด:</span>
+          <select id="cartStatusSelect" style="flex:1; min-width:120px; padding:8px 12px; border-radius:8px; border:1.5px solid #fcd34d; font-family:inherit; font-size:0.88em; font-weight:700; cursor:pointer; background:white; color:#92400e; outline:none;">
+            <option value="รอมอบ">รอมอบ</option>
+            <option value="มอบแล้ว" selected>มอบแล้ว</option>
+            <option value="จัดส่งแล้ว">จัดส่งแล้ว</option>
+            <option value="ยกเลิก">ยกเลิก</option>
+          </select>
+          <button onclick="saveCart()" id="cartSaveBtn" style="flex:1; min-width:120px; background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; border-radius:8px; padding:9px 12px; font-family:inherit; font-size:0.92em; font-weight:800; cursor:pointer; box-shadow:0 3px 10px rgba(245, 158, 11, 0.3); transition:all 0.2s; white-space:nowrap;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+            ✅ บันทึกทั้งหมด
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===== หน้าจัดการออเดอร์ ===== -->
+    <div id="page-manage-orders" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">📦 จัดการออเดอร์</span>
+        <span class="topbar-badge">Orders</span>
+        <div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <button onclick="exportOrdersSheet()" style="background:#166534; color:white; border:none; border-radius:8px; padding:7px 13px; cursor:pointer; font-size:0.8em; font-weight:700; display:flex; align-items:center; gap:5px; font-family:inherit;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>Google Sheet
+          </button>
+          <button onclick="exportOrdersPdf()" style="background:#b91c1c; color:white; border:none; border-radius:8px; padding:7px 13px; cursor:pointer; font-size:0.8em; font-weight:700; display:flex; align-items:center; gap:5px; font-family:inherit;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>PDF
+          </button>
+          <button onclick="openSlipVerifyPanel()" style="background:#eff6ff; color:#1565c0; border:1.5px solid #bfdbfe; border-radius:8px; padding:7px 13px; cursor:pointer; font-size:0.8em; font-weight:700; font-family:inherit; position:relative;">
+            🔍 ตรวจสอบสลิป
+            <span id="slipVerifyBadge" style="display:none; position:absolute; top:-6px; right:-6px; background:#ef4444; color:white; border-radius:50%; width:18px; height:18px; font-size:0.7em; align-items:center; justify-content:center;">0</span>
+          </button>
+          <button onclick="printSelectedLabels('order')" style="background:#7c3aed; color:white; border:none; border-radius:8px; padding:7px 13px; cursor:pointer; font-size:0.8em; font-weight:700; font-family:inherit;">🏷️ ใบปะหน้าออเดอร์</button>
+          <button onclick="printSelectedLabels('postal')" style="background:#0891b2; color:white; border:none; border-radius:8px; padding:7px 13px; cursor:pointer; font-size:0.8em; font-weight:700; font-family:inherit;">📮 ใบไปรษณีย์</button>
+          <button onclick="openAdminSubPage('audit-log'); loadAuditLog()" style="background:#fffbeb; color:#92400e; border:1px solid #fde68a; border-radius:8px; padding:7px 12px; cursor:pointer; font-size:0.8em; font-weight:700; font-family:inherit;">📋 ดู Log</button>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="filter-group" style="flex:2; min-width:200px;">
+          <label>🔍 ค้นหา</label>
+          <input type="text" id="filterOrderSearch" placeholder="ชื่อ, Order ID, เบอร์, รายการ..."
+            oninput="applyOrderFilter()" style="margin:0;">
+        </div>
+        <div class="filter-group">
+          <label>วันที่สั่งซื้อ</label>
+          <input type="date" id="filterOrderDate" onchange="applyOrderFilter()">
+        </div>
+        <div class="filter-group">
+          <label>สถานะ</label>
+          <select id="filterOrderStatus" onchange="applyOrderFilter()">
+            <option value="">-- ทั้งหมด --</option>
+            <option value="รอตรวจสอบ">รอตรวจสอบ</option>
+            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+            <option value="กำลังเตรียมจัดส่ง">กำลังเตรียมจัดส่ง</option>
+            <option value="ล่าช้า">ล่าช้า</option>
+            <option value="จัดส่งแล้ว">จัดส่งแล้ว</option>
+            <option value="ยกเลิก">ยกเลิก</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>ประเภทจัดส่ง</label>
+          <select id="filterOrderShipping" onchange="applyOrderFilter()">
+            <option value="">-- ทั้งหมด --</option>
+            <option value="รับเอง">📍 รับเอง</option>
+            <option value="ส่ง">🚚 ส่ง</option>
+          </select>
+        </div>
+        <div class="filter-group" style="justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <button class="btn-reset" onclick="resetOrderFilter()">✕ ล้าง</button>
+        </div>
+      </div>
+
+      <!-- Bulk action bar (แสดงเมื่อติ๊กรายการ) -->
+      <div id="orderBulkBar" style="display:none; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:10px; padding:10px 16px; margin-bottom:12px; display:none; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span id="orderBulkCount" style="font-weight:700; color:#1e40af; font-size:0.9em;">เลือก 0 รายการ</span>
+        <select id="bulkStatusSelect" style="margin:0; padding:6px 10px; border-radius:8px; border:1.5px solid #93c5fd; font-size:0.85em; width:auto;">
+          <option value="">-- เปลี่ยนสถานะเป็น --</option>
+          <option value="รอตรวจสอบ">รอตรวจสอบ</option>
+          <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+          <option value="กำลังเตรียมจัดส่ง">กำลังเตรียมจัดส่ง</option>
+          <option value="ล่าช้า">ล่าช้า</option>
+          <option value="จัดส่งแล้ว">จัดส่งแล้ว</option>
+          <option value="ยกเลิก">ยกเลิก</option>
+        </select>
+        <button onclick="bulkSaveDraft()" style="background:#fef9c3; color:#92400e; border:1px solid #fde68a; border-radius:8px; padding:7px 14px; cursor:pointer; font-size:0.82em; font-weight:700; font-family:inherit;">💾 บันทึกร่าง</button>
+        <button onclick="bulkSaveConfirm()" style="background:#1565c0; color:white; border:none; border-radius:8px; padding:7px 14px; cursor:pointer; font-size:0.82em; font-weight:700; font-family:inherit;">✅ บันทึกจริง</button>
+        <button onclick="exportSelectedPdf()" style="background:#b91c1c; color:white; border:none; border-radius:8px; padding:7px 14px; cursor:pointer; font-size:0.82em; font-weight:700; font-family:inherit;">📄 Export ที่เลือก</button>
+        <button onclick="clearOrderSelection()" style="background:none; border:none; color:#64748b; cursor:pointer; font-size:0.82em; font-family:inherit; padding:7px 8px;">✕ ยกเลิกการเลือก</button>
+      </div>
+
+      <div class="filter-result-count" id="orderResultCount"></div>
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width:36px; text-align:center;">
+                <input type="checkbox" id="selectAllOrders" onchange="toggleSelectAllOrders(this)" style="width:16px; height:16px; cursor:pointer; accent-color:#1565c0;">
+              </th>
+              <th>วันเวลา</th><th>Order ID</th><th>ลูกค้า</th><th>รายการสั่งซื้อ</th><th>สถานะ</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrderList"><tr><td colspan="6" style="text-align:center; padding:30px; color:#94a3b8;">กำลังโหลดข้อมูล...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการการจัดส่ง ===== -->
+    <div id="page-manage-shipping" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">📬 จัดการช่องทางจัดส่ง</span>
+        <span class="topbar-badge">ShippingOptions</span>
+      </div>
+
+      <div class="admin-form-box">
+        <h4 id="shippingFormTitle">➕ เพิ่มช่องทางจัดส่งใหม่</h4>
+        <input type="hidden" id="shippingEditRow">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+          <input type="text"   id="shId"   placeholder="รหัส (เช่น postal, pickup)" style="flex:1;">
+          <input type="text"   id="shName" placeholder="ชื่อช่องทาง * (เช่น จัดส่งไปรษณีย์ EMS)" style="flex:2;">
+          <input type="number" id="shFee"  placeholder="ค่าจัดส่ง (฿)" style="flex:1;" min="0" value="0">
+        </div>
+        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.9em;">
+            <input type="checkbox" id="shRequireAddr" style="transform:scale(1.2);">
+            <span>ต้องการที่อยู่จัดส่ง (กรณีส่งไปรษณีย์)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.9em;">
+            <input type="checkbox" id="shActive" checked style="transform:scale(1.2);">
+            <span>เปิดใช้งาน</span>
+          </label>
+        </div>
+        <input type="text" id="shNote" placeholder="หมายเหตุ (เช่น รับของที่ห้อง 101 ทุกวันพุธ)">
+        <div style="display:flex; gap:8px; margin-top:4px;">
+          <button onclick="saveAdminShipping()" class="btn btn-submit" style="max-width:160px; margin:0;">💾 บันทึก</button>
+          <button onclick="resetShippingForm()" class="btn btn-details" style="width:auto; margin:0;">✕ ล้าง</button>
+        </div>
+      </div>
+
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:0.85em; color:#1e40af; line-height:1.6;">
+        <b>📌 วิธีใช้:</b> เพิ่มช่องทางจัดส่งที่ต้องการให้ลูกค้าเลือก เช่น รับที่จุดนัด / ส่งไปรษณีย์<br>
+        ถ้าเปิด "ต้องการที่อยู่จัดส่ง" ระบบจะแสดงช่องกรอกที่อยู่ในฟอร์มสั่งซื้อโดยอัตโนมัติ
+      </div>
+
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>รหัส</th>
+              <th>ชื่อช่องทาง</th>
+              <th>ค่าส่ง</th>
+              <th>ต้องการที่อยู่</th>
+              <th>สถานะ</th>
+              <th>หมายเหตุ</th>
+              <th style="text-align:center;">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="shippingTableBody">
+            <tr><td colspan="7" style="text-align:center; padding:24px; color:#94a3b8;">กำลังโหลด...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการสินค้า ===== -->
+    <div id="page-manage-products" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">🛒 จัดการคลังสินค้า</span>
+        <span class="topbar-badge">Products</span>
+      </div>
+
+      <!-- ===== ฟอร์มเพิ่ม / แก้ไข ===== -->
+      <div class="admin-form-box" id="prodFormBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+          <h4 id="prodFormTitle" style="margin:0;">➕ เพิ่มสินค้าใหม่</h4>
+          <button id="btnCancelEditProd" onclick="resetProdForm()" style="display:none; background:#fef2f2; color:#dc2626; border:1.5px solid #fca5a5; border-radius:8px; padding:6px 14px; cursor:pointer; font-size:0.85em; font-weight:700;">✕ ยกเลิกแก้ไข</button>
+        </div>
+        <input type="hidden" id="editProdRow">
+
+        <!-- หมวดหมู่ -->
+        <select id="addProdCategory" onchange="toggleCategoryFields()" style="margin-bottom:10px; font-weight:700; color:var(--dark-blue);">
+          <option value="ทั่วไป">📁 ทั่วไป</option>
+          <option value="เสื้อผ้า">👕 เสื้อผ้า (เปิดตารางไซส์)</option>
+          <option value="เครื่องประดับ">💍 เครื่องประดับ</option>
+          <option value="อื่นๆ">📦 อื่นๆ</option>
+        </select>
+
+        <!-- รหัส / ชื่อ / ราคา -->
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+          <input type="text"   id="addProdId"    placeholder="รหัสสินค้า *" style="flex:1; min-width:90px;">
+          <input type="text"   id="addProdName"  placeholder="ชื่อสินค้า *" style="flex:2; min-width:140px;">
+          <input type="number" id="addProdPrice" placeholder="ราคา (฿) *"   style="flex:1; min-width:80px;">
+        </div>
+
+        <!-- ประเภท + สถานะขาย -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="font-size:0.78em;font-weight:700;color:#64748b;display:block;margin-bottom:3px;">ประเภทสินค้า</label>
+            <select id="addProdType" onchange="togglePreorderDeadline()" style="margin:0;">
+              <option value="normal">🛍️ ปกติ (พร้อมส่ง)</option>
+              <option value="preorder">📦 Pre-order (จองล่วงหน้า)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.78em;font-weight:700;color:#64748b;display:block;margin-bottom:3px;">สถานะการขาย</label>
+            <select id="addProdActive" style="margin:0;">
+              <option value="TRUE">✅ เปิดขาย</option>
+              <option value="FALSE">🔴 ปิดขาย (ไม่แสดงในร้าน)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- วันปิดรับออเดอร์ + เวลา -->
+        <div id="preorderDeadlineWrap" style="display:none; margin-bottom:10px;">
+          <label style="font-size:0.78em;font-weight:700;color:#7c3aed;display:block;margin-bottom:4px;">📅 วันปิดรับออเดอร์ (Pre-order)</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="date" id="addProdDeadlineDate" style="flex:1;margin:0;" title="วันปิดรับ">
+            <input type="time" id="addProdDeadlineTime" value="23:59" style="width:100px;margin:0;" title="เวลาปิดรับ">
+            <span style="font-size:0.8em;color:#7c3aed;white-space:nowrap;">น.</span>
+          </div>
+          <div style="font-size:0.73em;color:#94a3b8;margin-top:3px;">ระบบจะปิดรับออเดอร์อัตโนมัติเมื่อถึงเวลา</div>
+        </div>
+
+        <!-- สต็อก + ไซส์พิเศษ -->
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+          <div style="flex:1; min-width:120px;">
+            <label style="font-size:0.8em; color:#64748b; display:block; margin-bottom:3px;">📦 สต็อก (ว่าง = ไม่จำกัด)</label>
+            <input type="number" id="addProdStock" placeholder="เช่น 50" style="margin:0;" min="0">
+          </div>
+          <div style="flex:2; min-width:180px;">
+            <label style="font-size:0.8em; color:#6d28d9; display:block; margin-bottom:3px; font-weight:700;">🔮 ไซส์พิเศษ (ว่าง = ไม่มี) เช่น 3XL:690,4XL:720</label>
+            <input type="text" id="addProdSpecialSizes" placeholder="ไซส์:ราคา คั่นด้วยจุลภาค" style="margin:0; font-family:monospace;">
+          </div>
+        </div>
+
+        <!-- ===== ช่องทางชำระเงิน ===== -->
+        <div style="border:1.5px solid #dde3f0; border-radius:12px; padding:14px; margin-bottom:14px; background:#fafbff;">
+          <label style="font-size:0.85em; font-weight:700; color:var(--dark-blue); display:block; margin-bottom:12px;">💳 ช่องทางชำระเงิน</label>
+
+          <!-- รูป QR Code -->
+          <div style="margin-bottom:12px;">
+            <div style="font-size:0.8em; font-weight:700; color:#475569; margin-bottom:6px;">📷 รูป QR Code (อัปโหลดหรือใส่ลิงก์)</div>
+            <input type="text" id="addProdQrUrl" placeholder="URL รูป QR เช่น https://drive.google.com/..." style="margin-bottom:6px;">
+            <div id="qrUrlPreviewWrap" style="display:none; text-align:center; margin-top:6px;">
+              <img id="qrUrlPreviewImg" style="max-height:140px; border-radius:8px; border:1px solid #e0e7ff;">
+              <button onclick="document.getElementById('addProdQrUrl').value=''; document.getElementById('qrUrlPreviewWrap').style.display='none';"
+                style="display:block; margin:6px auto 0; font-size:0.78em; color:#ef4444; background:none; border:none; cursor:pointer;">✕ ลบรูป</button>
+            </div>
+          </div>
+
+          <!-- เลขบัญชี/ข้อมูลโอนเงิน -->
+          <div>
+            <div style="font-size:0.8em; font-weight:700; color:#475569; margin-bottom:6px;">🏦 เลขบัญชีหรือข้อมูลโอนเงิน (กดคัดลอกได้)</div>
+            <input type="text" id="addProdPromptpay" placeholder="เช่น 0812345678 หรือ ธ.กสิกร 123-4-56789-0" style="margin:0;">
+            <div style="font-size:0.72em; color:#94a3b8; margin-top:4px;">ผู้ซื้อสามารถกดคัดลอกได้ในหน้าชำระเงิน</div>
+          </div>
+          <input type="hidden" id="addProdQrBase64" value="">
+          <input type="hidden" id="addProdQrPasteBase64" value="">
+        </div>
+
+                <!-- ตารางไซส์ -->
+        <div id="clothingFields" style="display:none; margin-bottom:14px; border:1px solid #e0e7ff; padding:14px; border-radius:10px; background:#fff;">
+          <h5 style="margin-top:0; color:var(--primary-blue);">📏 ตารางขนาด (Size Chart)</h5>
+          <div style="overflow-x:auto;">
+            <table id="dynamicSizeTable" style="width:100%; border-collapse:collapse; text-align:center;">
+              <thead><tr>
+                <th><input type="text" value="สัดส่วน" style="width:100%; padding:5px; text-align:center; font-weight:bold;"></th>
+                <th><input type="text" value="S" style="width:100%; padding:5px; text-align:center; font-weight:bold;"></th>
+                <th><input type="text" value="M" style="width:100%; padding:5px; text-align:center; font-weight:bold;"></th>
+              </tr></thead>
+              <tbody><tr>
+                <td><input type="text" value="รอบอก" style="width:100%; padding:5px; text-align:center; font-weight:bold;"></td>
+                <td><input type="text" placeholder='38"' style="width:100%; padding:5px; text-align:center;"></td>
+                <td><input type="text" placeholder='40"' style="width:100%; padding:5px; text-align:center;"></td>
+              </tr></tbody>
+            </table>
+          </div>
+          <div style="margin-top:10px; display:flex; gap:8px;">
+            <button class="btn btn-details" type="button" style="width:auto; margin:0;" onclick="addSizeColumn()">+ เพิ่มไซส์</button>
+            <button class="btn btn-details" type="button" style="width:auto; margin:0;" onclick="addSizeRow()">+ เพิ่มสัดส่วน</button>
+          </div>
+        </div>
+
+        <!-- รูปสินค้า -->
+        <div style="margin-bottom:12px; border:1.5px solid #e2e8f0; border-radius:12px; padding:13px;">
+          <label style="font-size:0.82em; color:#475569; display:block; margin-bottom:8px; font-weight:700;">🖼️ รูปสินค้า</label>
+
+          <!-- URL input + preview row -->
+          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+            <div style="flex:1;">
+              <input type="text" id="addProdImgLink"
+                placeholder="วาง URL รูปภาพ (คั่นหลายรูปด้วย ,) เช่น https://drive.google.com/..."
+                style="margin:0;" oninput="previewProductImages()">
+              <div style="font-size:0.72em;color:#94a3b8;margin-top:3px;">
+                💡 รองรับ Google Drive, Direct URL — หลายรูปคั่นด้วย <code>,</code>
+              </div>
+            </div>
+            <button type="button" onclick="previewProductImages()"
+              style="background:#eff6ff;color:#1565c0;border:1.5px solid #bfdbfe;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:0.82em;font-weight:700;white-space:nowrap;font-family:inherit;flex-shrink:0;">
+              👁️ ดูตัวอย่าง
+            </button>
+          </div>
+
+          <!-- Preview strip -->
+          <div id="imgPreviewStrip" style="display:none; overflow-x:auto; white-space:nowrap; padding:6px 0; border-top:1px solid #f1f5f9; margin-top:4px;">
+          </div>
+
+          <!-- Paste fallback -->
+          <details style="margin-top:8px;">
+            <summary style="font-size:0.78em;color:#64748b;cursor:pointer;user-select:none;">📋 วางรูปจาก Clipboard แทน</summary>
+            <div style="margin-top:8px;">
+              <div id="pasteArea" class="paste-area" tabindex="0" style="min-height:60px;">คลิกที่นี่ แล้วกด Ctrl+V</div>
+              <img id="pastePreview" style="max-height:100px; display:none; margin-top:6px; border-radius:6px;">
+              <input type="hidden" id="addProdImgBase64">
+            </div>
+          </details>
+        </div>
+
+        <textarea id="addProdDesc" rows="2" placeholder="รายละเอียดเพิ่มเติม" style="margin-bottom:12px;"></textarea>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-submit" onclick="adminSaveProduct()" style="max-width:180px; margin:0;" id="btnSaveProd">💾 บันทึกสินค้า</button>
+          <button id="btnCancelEditProd2" onclick="resetProdForm()" style="display:none; background:#f1f5f9; color:#475569; border:none; border-radius:10px; padding:10px 18px; cursor:pointer; font-size:0.9em;">✕ ยกเลิก</button>
+        </div>
+      </div>
+
+      <!-- ===== ตารางสินค้า ===== -->
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>รหัส / ชื่อ</th>
+              <th>ราคา</th>
+              <th>สต็อก</th>
+              <th>วันปิดรับ</th>
+              <th style="text-align:center;">สถานะ</th>
+              <th style="text-align:center; width:140px;">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductList">
+            <tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;">กำลังโหลด...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการคำขอยืมอุปกรณ์ ===== -->
+    <div id="page-manage-equip" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">💻 คำขอยืมอุปกรณ์</span>
+        <span class="topbar-badge">Equipment Requests</span> <button onclick="openAdminSubPage('audit-log'); loadAuditLog()" style="margin-left:auto; background:#fffbeb; color:#92400e; border:1px solid #fde68a; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:0.8em; font-weight:700; white-space:nowrap;">📋 ดู Log</button>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>วันที่รับอุปกรณ์</label>
+          <input type="date" id="filterEquipDate">
+        </div>
+        <div class="filter-group">
+          <label>สถานะ</label>
+          <select id="filterEquipStatus">
+            <option value="">-- ทั้งหมด --</option>
+            <option value="รออนุมัติ">รออนุมัติ</option>
+            <option value="อนุมัติ/กำลังยืม">อนุมัติ/กำลังยืม</option>
+            <option value="คืนแล้ว">คืนแล้ว</option>
+            <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+            <option value="ไม่อนุมัติ/ยกเลิก">ไม่อนุมัติ/ยกเลิก</option>
+          </select>
+        </div>
+        <div class="filter-group" style="justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-filter" onclick="applyEquipFilter()">🔍 กรอง</button>
+            <button class="btn-reset" onclick="resetEquipFilter()">✕ ล้าง</button>
+          </div>
+        </div>
+      </div>
+      <div class="filter-result-count" id="equipResultCount"></div>
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead><tr><th>วันเวลาที่ขอ</th><th>รหัส / ผู้ยืม</th><th>รายการอุปกรณ์ & กำหนดการ</th><th>หลักฐาน</th><th>สถานะ</th><th style="text-align:center;">จัดการ</th></tr></thead>
+          <tbody id="adminEquipReqList"><tr><td colspan="6" style="text-align:center; padding:30px; color:#94a3b8;">กำลังโหลดข้อมูลคำขอ...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการจองห้อง ===== -->
+    <div id="page-manage-booking" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">🏫 จัดการการจองห้อง</span>
+        <span class="topbar-badge">Room Bookings</span> <button onclick="openAdminSubPage('audit-log'); loadAuditLog()" style="margin-left:auto; background:#fffbeb; color:#92400e; border:1px solid #fde68a; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:0.8em; font-weight:700; white-space:nowrap;">📋 ดู Log</button>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>วันที่ใช้ห้อง</label>
+          <input type="date" id="filterBookDate">
+        </div>
+        <div class="filter-group">
+          <label>สถานะ</label>
+          <select id="filterBookStatus">
+            <option value="">-- ทั้งหมด --</option>
+            <option value="รออนุมัติ">รออนุมัติ</option>
+            <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
+            <option value="กำลังใช้งาน">กำลังใช้งาน</option>
+            <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+            <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+            <option value="ยกเลิก">ยกเลิก</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>ค้นหา</label>
+          <input type="text" id="filterBookSearch" placeholder="ชื่อ / ห้อง / รหัส..." oninput="applyBookFilter()">
+        </div>
+        <div class="filter-group" style="justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-filter" onclick="applyBookFilter()">🔍 กรอง</button>
+            <button class="btn-reset" onclick="resetBookFilter()">✕ ล้าง</button>
+          </div>
+        </div>
+      </div>
+      <div class="filter-result-count" id="bookResultCount"></div>
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead><tr><th>วันเวลาที่จอง</th><th>ผู้จอง</th><th>รายละเอียดห้อง/เวลา</th><th>วัตถุประสงค์</th><th>สถานะ</th><th style="text-align:center;">จัดการ</th></tr></thead>
+          <tbody id="adminBookingList"><tr><td colspan="6" style="text-align:center; padding:30px; color:#94a3b8;">กำลังโหลดข้อมูล...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== หน้าจัดการคลังอุปกรณ์ ===== -->
+    <div id="page-manage-inventory" class="card">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">📋 คลังอุปกรณ์ที่ให้ยืม</span>
+        <span class="topbar-badge">Equipment List</span>
+      </div>
+
+      <div id="inventoryFormBox" class="admin-form-box">
+        <h4 id="inventoryFormTitle">➕ เพิ่มอุปกรณ์ใหม่</h4>
+        <input type="hidden" id="editEqId">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>สังกัดองค์กร</label>
+            <select id="addEqOrg" onchange="updateCategoryDropdown()">
+              <option value="media">สโมสรนักศึกษา คณะศึกษาศาสตร์</option>
+              <option value="samo">สโมสรนักศึกษาคณะศึกษาศาสตร์ มช.</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>หมวดหมู่</label>
+            <select id="addEqCatSelect" style="margin-bottom: 6px;" onchange="syncCatInput()">
+              <option value="">-- เลือกหมวดหมู่ที่มีอยู่ --</option>
+            </select>
+            <input type="text" id="addEqCat" placeholder="หรือพิมพ์หมวดหมู่ใหม่ที่นี่" style="margin-bottom: 4px;">
+            <small style="color: #718096; font-size: 0.8em;">* เลือกจากรายการ หรือพิมพ์ชื่อใหม่ด้านล่าง</small>
+          </div>
+          <div class="form-group">
+            <label>ชื่ออุปกรณ์</label>
+            <input type="text" id="addEqName" placeholder="เช่น ไมค์ไวร์เลส, ไฟ LED">
+          </div>
+          <div class="form-group">
+            <label>สถานะอุปกรณ์</label>
+            <select id="addEqStatus">
+              <option value="พร้อมใช้">✅ พร้อมใช้</option>
+              <option value="ชำรุด">⚠️ ชำรุด</option>
+              <option value="งดใช้">🚫 งดใช้</option>
+            </select>
+            <small style="color:#e07b00; font-size:0.78em; margin-top:4px; display:block;">* ชำรุด / งดใช้ จะไม่แสดงในระบบยืมของนักศึกษา</small>
+          </div>
+          <div class="form-group">
+            <label>จำนวน (ชิ้น)</label>
+            <input type="number" id="addEqQty" value="1" min="1" style="width:100px;">
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+          <button class="btn btn-submit" id="btnSaveEquip" onclick="adminSaveEquipment()" style="max-width: 200px; margin-top: 0;">💾 บันทึกทันที</button>
+          <button class="btn" id="btnAddInvQueue" onclick="addInvToQueue()" style="margin-top:0; background:#f0fdf4; color:#15803d; border:1.5px solid #86efac; font-weight:700;">+ เพิ่มเข้าคิว</button>
+          <button class="btn" id="btnCancelEdit" onclick="cancelEditEquip()" style="display: none; background: #e2e8f0; color: #475569; margin-top: 0;">✕ ยกเลิกการแก้ไข</button>
+        </div>
+      </div>
+
+      <!-- Inventory Queue Box -->
+      <div id="invQueueBox" style="display:none; margin-bottom:20px; background:#f0fdf4; border:2px dashed #86efac; border-radius:14px; padding:18px 20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h4 style="margin:0; color:#15803d; font-size:0.95em;">📋 รายการรอบันทึก <span id="invQueueCount" style="background:#16a34a; color:white; padding:2px 8px; border-radius:20px; font-size:0.85em; margin-left:6px;">0</span></h4>
+          <button class="btn btn-submit" id="btnSaveAllInv" onclick="saveAllInvQueue()" style="width:auto; margin:0; background:#16a34a;">💾 บันทึกทั้งหมด</button>
+        </div>
+        <div id="invQueueList" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>สังกัด</label>
+          <select id="filterInvOrg" onchange="updateFilterCatDropdown()">
+            <option value="">-- ทั้งหมด --</option>
+            <option value="samo">สโมสรนักศึกษา คณะศึกษาศาสตร์</option>
+            <option value="สโมสรฯ">สโมสรนักศึกษาฯ</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>หมวดหมู่</label>
+          <select id="filterInvCat">
+            <option value="">-- ทั้งหมด --</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>สถานะ</label>
+          <select id="filterInvStatus">
+            <option value="">-- ทั้งหมด --</option>
+            <option value="พร้อมใช้">✅ พร้อมใช้</option>
+            <option value="ชำรุด">⚠️ ชำรุด</option>
+            <option value="งดใช้">🚫 งดใช้</option>
+          </select>
+        </div>
+        <div class="filter-group" style="justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-filter" onclick="applyInvFilter()">🔍 กรอง</button>
+            <button class="btn-reset" onclick="resetInvFilter()">✕ ล้าง</button>
+          </div>
+        </div>
+      </div>
+      <div class="filter-result-count" id="invResultCount"></div>
+
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead><tr><th>รหัส</th><th>สังกัด</th><th>หมวดหมู่</th><th>ชื่ออุปกรณ์</th><th style="text-align:center;">จำนวน</th><th style="text-align:center;">สถานะ</th><th style="text-align:center;">จัดการ</th></tr></thead>
+          <tbody id="adminInventoryList"><tr><td colspan="7" style="text-align:center; padding:30px; color:#94a3b8;">กำลังโหลด...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- ===== จัดการกิจกรรม ===== -->
+    <div id="page-manage-activities" class="card" style="padding:0!important;">
+      <div class="admin-topbar">
+        <button class="btn-back" onclick="showPage('admin-dashboard')">⬅ ย้อนกลับ</button>
+        <span class="topbar-title">📋 จัดการกิจกรรม</span>
+        <button onclick="openActivityForm(null)"
+          style="margin-left:auto;background:linear-gradient(135deg,#0d2454,#1565c0);color:white;border:none;padding:8px 18px;border-radius:8px;font-weight:700;font-size:.85em;cursor:pointer;font-family:inherit;">
+          ➕ เพิ่มกิจกรรม
+        </button>
+      </div>
+      <div style="padding:0 28px 28px;">
+
+        <!-- Stats bar -->
+        <div id="actAdminStats" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;"></div>
+
+        <!-- Activity List -->
+        <div id="actAdminList">
+          <div style="text-align:center;padding:40px;color:#94a3b8;">⏳ กำลังโหลด...</div>
+        </div>
+
+        <!-- Registrations panel -->
+        <div id="actRegPanel" style="display:none;margin-top:24px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+            <button onclick="document.getElementById('actRegPanel').style.display='none'"
+              style="background:#f1f5f9;color:#475569;border:none;padding:7px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.85em;">
+              ✕ ปิด
+            </button>
+            <h4 id="actRegPanelTitle" style="margin:0;font-size:.95em;color:#0d2340;"></h4>
+            <span id="actRegCount" style="background:#eff6ff;color:#1565c0;font-size:.78em;font-weight:700;padding:3px 10px;border-radius:20px;"></span>
+          </div>
+          <div class="admin-table-container">
+            <table class="admin-table" style="min-width:900px;">
+              <thead>
+                <tr>
+                  <th>#</th><th>รหัสนักศึกษา</th><th>ชื่อ-นามสกุล</th><th>ชื่อเล่น</th>
+                  <th>ชั้นปี</th><th>สาขา / คณะ</th><th>เบอร์โทร</th>
+                  <th>อาหาร</th><th>สุขภาพ</th><th>วันที่สมัคร</th><th>สถานะ</th>
+                </tr>
+              </thead>
+              <tbody id="actRegTableBody">
+                <tr><td colspan="11" style="text-align:center;padding:24px;color:#94a3b8;">เลือกกิจกรรมเพื่อดูรายชื่อ</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add/Edit Modal -->
+      <div id="actFormModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1200;align-items:center;justify-content:center;overflow-y:auto;padding:20px;">
+        <div style="background:white;border-radius:20px;width:100%;max-width:580px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:auto;">
+          <div style="background:linear-gradient(135deg,#0d2454,#1565c0);padding:20px 24px;color:white;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <h3 id="actFormTitle" style="margin:0 0 3px;font-size:1em;font-weight:700;">เพิ่มกิจกรรม</h3>
+              <p style="margin:0;font-size:.8em;opacity:.7;">กรอกข้อมูลกิจกรรมที่ต้องการ</p>
+            </div>
+            <button onclick="closeActivityForm()" style="background:rgba(255,255,255,.18);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1em;">✕</button>
+          </div>
+          <div style="padding:22px 24px;max-height:78vh;overflow-y:auto;">
+            <input type="hidden" id="actFormRowIndex" value="">
+
+            <style>
+              .actf-section{margin-bottom:18px;}
+              .actf-section-label{font-size:.72em;font-weight:800;color:#94a3b8;letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px;padding-bottom:5px;border-bottom:1.5px solid #f1f5f9;}
+              .actf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+              .actf-group{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+              .actf-group label{font-size:.78em;font-weight:700;color:#475569;}
+              .actf-group input,.actf-group select,.actf-group textarea{margin:0!important;font-size:.88em!important;}
+              .actf-datetime-box{background:#f8faff;border:1.5px solid #dde8f8;border-radius:10px;padding:12px 14px;}
+              .actf-datetime-title{font-size:.75em;font-weight:700;color:#1565c0;margin-bottom:8px;}
+            </style>
+
+            <!-- ข้อมูลพื้นฐาน -->
+            <div class="actf-section">
+              <div class="actf-section-label">📌 ข้อมูลกิจกรรม</div>
+              <div class="actf-group">
+                <label>ชื่อกิจกรรม *</label>
+                <input type="text" id="actF_name" placeholder="เช่น ค่ายอาสา บ้านน้องรัก">
+              </div>
+              <div class="actf-row">
+                <div class="actf-group">
+                  <label>ประเภท</label>
+                  <select id="actF_type">
+                    <option value="general">🎉 กิจกรรมทั่วไป</option>
+                    <option value="camp">⛺ ค่าย / อาสา</option>
+                    <option value="academic">📚 วิชาการ / สัมมนา</option>
+                    <option value="volunteer">🌱 จิตอาสา</option>
+                  </select>
+                </div>
+                <div class="actf-group">
+                  <label>ไอคอน (Emoji)</label>
+                  <input type="text" id="actF_icon" placeholder="🎉">
+                </div>
+              </div>
+              <div class="actf-group">
+                <label>สถานที่</label>
+                <input type="text" id="actF_location" placeholder="เช่น ห้องประชุม 1 คณะศึกษาศาสตร์">
+              </div>
+              <div class="actf-group">
+                <label>รายละเอียด</label>
+                <textarea id="actF_desc" rows="2" placeholder="รายละเอียดกิจกรรม..." style="resize:vertical;"></textarea>
+              </div>
+            </div>
+
+            <!-- วันที่-เวลา -->
+            <div class="actf-section">
+              <div class="actf-section-label">📅 วันที่และเวลา</div>
+              <div class="actf-datetime-box" style="margin-bottom:10px;">
+                <div class="actf-datetime-title">🟢 วันที่-เวลาเริ่มต้น</div>
+                <div class="actf-row">
+                  <div class="actf-group">
+                    <label>วันที่เริ่ม *</label>
+                    <input type="date" id="actF_dateStart">
+                  </div>
+                  <div class="actf-group">
+                    <label>เวลาเริ่ม</label>
+                    <input type="time" id="actF_timeStart">
+                  </div>
+                </div>
+              </div>
+              <div class="actf-datetime-box" style="margin-bottom:10px;">
+                <div class="actf-datetime-title">🔴 วันที่-เวลาสิ้นสุด</div>
+                <div class="actf-row">
+                  <div class="actf-group">
+                    <label>วันที่สิ้นสุด</label>
+                    <input type="date" id="actF_dateEnd">
+                  </div>
+                  <div class="actf-group">
+                    <label>เวลาสิ้นสุด</label>
+                    <input type="time" id="actF_timeEnd">
+                  </div>
+                </div>
+              </div>
+              <div class="actf-datetime-box">
+                <div class="actf-datetime-title">⏰ ปิดรับสมัคร</div>
+                <div class="actf-row">
+                  <div class="actf-group">
+                    <label>วันปิดรับสมัคร</label>
+                    <input type="date" id="actF_deadlineDate">
+                  </div>
+                  <div class="actf-group">
+                    <label>เวลาปิดรับสมัคร</label>
+                    <input type="time" id="actF_deadlineTime">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- การรับสมัคร -->
+            <div class="actf-section">
+              <div class="actf-section-label">👥 การรับสมัคร</div>
+              <div class="actf-row">
+                <div class="actf-group">
+                  <label>จำนวนรับสูงสุด (0 = ไม่จำกัด)</label>
+                  <input type="number" id="actF_maxCount" placeholder="0" min="0">
+                </div>
+                <div class="actf-group" style="justify-content:flex-end;padding-bottom:4px;">
+                  <label style="cursor:pointer;display:flex;align-items:center;gap:8px;margin-top:auto;">
+                    <input type="checkbox" id="actF_isOpen" checked style="width:18px;height:18px;accent-color:#1565c0;margin:0;">
+                    เปิดรับสมัคร
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div id="actFormAlert" style="display:none;padding:10px 14px;border-radius:8px;font-size:.85em;margin-bottom:12px;"></div>
+
+            <button onclick="saveActivityAdmin()"
+              style="width:100%;background:linear-gradient(135deg,#0d2454,#1565c0);color:white;border:none;padding:13px;border-radius:10px;font-size:.9em;font-weight:700;cursor:pointer;font-family:inherit;">
+              💾 บันทึกกิจกรรม
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
