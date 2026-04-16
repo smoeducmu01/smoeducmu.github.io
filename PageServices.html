@@ -1,0 +1,263 @@
+<div id="page-equipment" class="card">
+      <div class="equip-hero">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h2 style="margin: 0 0 5px 0;">🎥 ระบบยืมของ</h2>
+            <p style="margin: 0; opacity: 0.9;">กรอกข้อมูล เลือกรายการอุปกรณ์ และแนบหลักฐาน</p>
+          </div>
+          <button onclick="openEquipCatalog()" style="background:rgba(255,255,255,0.2); border:1.5px solid rgba(255,255,255,0.6); color:white; border-radius:10px; padding:9px 18px; cursor:pointer; font-size:0.88em; font-weight:700; display:flex; align-items:center; gap:7px; backdrop-filter:blur(4px); transition:0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+            📋 ดูรายการอุปกรณ์ทั้งหมด
+          </button>
+        </div>
+      </div>
+      <form id="borrowForm">
+        <div class="equip-section">
+          <div class="line-autofill-banner" id="borrow-autofill-banner" style="display:none;"></div>
+          <div class="line-autofill-prompt" id="borrow-autofill-prompt">
+            <span style="white-space:nowrap;font-weight:700;">🔗 ดึงจาก LINE:</span>
+            <input type="text" id="borrow-autofill-prompt-input" placeholder="รหัสนักศึกษา เช่น 650210343">
+            <button onclick="promptFillFromLine('borrow-autofill-prompt')">ดึงข้อมูล</button>
+          </div>
+          <h4>👤 ข้อมูลผู้ยืม</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>ชื่อ-นามสกุล *</label><input type="text" id="b_name" required></div>
+            <div class="form-group"><label>เบอร์โทรศัพท์ *</label><input type="text" id="b_phone" required></div>
+            <div class="form-group"><label>อีเมล * <small style="font-weight:400; color:#718096;">(รับการแจ้งเตือน)</small></label><input type="email" id="b_email" required placeholder="example@cmu.ac.th"></div>
+            <div class="form-group"><label>รหัสนักศึกษา/บุคลากร *</label><input type="text" id="b_sid" required></div>
+            <div class="form-group"><label>คณะ/สังกัด *</label><input type="text" id="b_faculty" required></div>
+            <div class="form-group"><label>ชมรม/หน่วยงาน *</label><input type="text" id="b_clubName" required placeholder="เช่น สโมสรนักศึกษา / สโมสรนักศึกษา ศษ."></div>
+            <div class="form-group"><label>ชื่อโครงการหรือกิจกรรม *</label><input type="text" id="b_purpose" required placeholder="เช่น โครงการค่ายอาสา, งานกีฬาสี..."></div>
+            <div class="form-group"><label>วัตถุประสงค์นำไปใช้งาน *</label><input type="text" id="b_borrowFor" required placeholder="เช่น ถ่ายทำสารคดีเพื่อการศึกษา โครงการ..."></div>
+          </div>
+        </div>
+        <div class="equip-section">
+          <h4>&#9200; ช่วงเวลาการยืม-คืน</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>วันที่ยืม *</label><input type="date" id="b_startDate" required onchange="onBorrowDateChange()"></div>
+            <div class="form-group"><label>เวลาที่ยืม *</label><input type="time" id="b_startTime" required></div>
+            <div class="form-group"><label>วันที่คืน *</label><input type="date" id="b_endDate" required onchange="onBorrowDateChange()"></div>
+            <div class="form-group"><label>เวลาที่คืน *</label><input type="time" id="b_endTime" required></div>
+            <div class="form-group"><label>วันที่จัดกิจกรรม <small style="color:#718096;">(สำหรับเอกสาร)</small></label><input type="date" id="b_activityDate"></div>
+          </div>
+          <!-- Availability Panel -->
+          <div class="avail-panel" id="availPanel">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+              <div style="font-weight:700; font-size:0.88em; color:var(--text);">🔍 ตรวจสอบความพร้อมของอุปกรณ์</div>
+              <div id="availSummaryBadge"></div>
+            </div>
+            <div id="availLoading" style="color:#94a3b8; font-size:0.85em;">⏳ กำลังตรวจสอบ...</div>
+            <div id="availList" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="equip-section">
+          <h4>🏢 เลือกสังกัดที่ต้องการยืมอุปกรณ์</h4>
+          <div class="org-card-container">
+            <div class="org-card" id="card-media" onclick="toggleOrg('media')">
+              <img src="https://lh3.googleusercontent.com/u/0/d/1_i0vqLUEIlOf-pWDhUUI1eBidRxWyfMQ" alt="สโมสรนักศึกษา Logo" class="org-card-logo">
+              <h5>สโมสรนักศึกษา คณะศึกษาศาสตร์</h5>
+            </div>
+            <div class="org-card" id="card-samo" onclick="toggleOrg('samo')">
+              <img src="https://lh3.googleusercontent.com/u/0/d/1vvpWMo2Cxv_ZDFkxobTc0rvRqTxOEhIb" alt="Samo Logo" class="org-card-logo">
+              <h5>สโมสรนักศึกษาคณะศึกษาศาสตร์ มช.</h5>
+            </div>
+          </div>
+        </div>
+        <div class="equip-section" id="equipmentSelectionSection" style="display: none; border-color: var(--primary-blue); background: #fdfdff;">
+          <h4>📦 เลือกรายการอุปกรณ์ <span id="selectedOrgTitle" style="color: var(--primary-blue); font-size: 0.9em; font-weight: normal;"></span></h4>
+          <!-- Real-time search -->
+          <div style="position:relative; margin-bottom:12px;">
+            <input type="text" id="equipSearchInput"
+              placeholder="🔍 ค้นหาอุปกรณ์... เช่น กล้อง, ไมค์, ขาตั้ง"
+              oninput="filterInventorySearch(this.value)"
+              style="width:100%; margin:0; padding-right:36px;">
+            <button id="btnClearEquipSearch" onclick="clearEquipSearch()"
+              style="display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%);
+              background:none; border:none; cursor:pointer; font-size:1em; color:#94a3b8; padding:0;">✕</button>
+          </div>
+          <div id="equipSearchCount" style="font-size:0.78em; color:#94a3b8; margin-bottom:8px; min-height:18px;"></div>
+          <div id="inventoryAccordion"></div>
+          <hr style="border-top: 1px dashed #ccc; margin: 20px 0;">
+          <h5 style="margin-top: 0;">➕ หมวดอื่น ๆ (ระบุเอง)</h5>
+          <div id="customItemsContainer"></div>
+          <button type="button" class="btn btn-details" style="width: auto;" onclick="addCustomEquipRow()">+ เพิ่มรายการอื่น</button>
+        </div>
+        <button type="button" class="btn btn-submit" onclick="startSubmitFlow()" id="btnStartSubmit">ส่งคำขอยืมอุปกรณ์</button>
+      </form>
+    </div>
+
+    <!-- ===== หน้าจองห้อง ===== -->
+    <div id="page-booking" class="card">
+      <div class="equip-hero" style="background: linear-gradient(120deg, #1565c0 0%, #1976d2 60%, #42a5f5 100%);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h2 style="margin:0 0 5px 0;">🏫 ระบบจองห้อง</h2>
+            <p style="margin:0; opacity:0.9;">กรอกข้อมูล เลือกห้อง และระบุช่วงเวลาที่ต้องการ</p>
+          </div>
+        </div>
+      </div>
+      <form id="bookingForm">
+
+        <!-- ส่วนที่ 1: ข้อมูลผู้จอง -->
+        <div class="equip-section">
+          <div class="line-autofill-banner" id="book-autofill-banner" style="display:none;"></div>
+          <div class="line-autofill-prompt" id="book-autofill-prompt">
+            <span style="white-space:nowrap;font-weight:700;">🔗 ดึงจาก LINE:</span>
+            <input type="text" id="book-autofill-prompt-input" placeholder="รหัสนักศึกษา เช่น 650210343">
+            <button onclick="promptFillFromLine('book-autofill-prompt')">ดึงข้อมูล</button>
+          </div>
+          <h4>👤 ข้อมูลผู้จอง</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>ชื่อ-นามสกุล *</label><input type="text" id="bookName" required></div>
+            <div class="form-group"><label>เบอร์โทรศัพท์ *</label><input type="text" id="bookPhone" required></div>
+            <div class="form-group"><label>อีเมล * <small style="font-weight:400; color:#718096;">(รับการแจ้งเตือน)</small></label><input type="email" id="bookEmail" required placeholder="example@cmu.ac.th"></div>
+            <div class="form-group"><label>รหัสนักศึกษา/บุคลากร *</label><input type="text" id="bookSid" required></div>
+            <div class="form-group"><label>หน่วยงาน/สาขาวิชา *</label><input type="text" id="bookMajor" required></div>
+            <div class="form-group"><label>คณะ/สังกัด *</label><input type="text" id="bookFaculty" required></div>
+          </div>
+        </div>
+
+        <!-- ส่วนที่ 2: เลือกห้อง -->
+        <div class="equip-section">
+          <h4>🚪 เลือกห้อง / สถานที่</h4>
+          <div class="form-group">
+            <label>ห้อง / สถานที่ที่ต้องการใช้งาน *</label>
+            <div style="position:relative;">
+              <select id="bookRoom" onchange="handleRoomSelectChange(this)" style="margin-bottom:6px;">
+                <option value="">-- เลือกจากรายการ หรือระบุเอง --</option>
+              </select>
+              <div id="customRoomWrap" style="display:none; position:relative;">
+                <input type="text" id="bookRoomCustom" placeholder="ระบุห้อง/สถานที่ เช่น ห้อง EDU 205, ลานกิจกรรม" style="margin-bottom:0; padding-right:90px;">
+                <button type="button" onclick="clearCustomRoom()" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer; font-size:0.82em; font-weight:600; padding:4px 8px; white-space:nowrap;">← เลือกจากรายการ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ส่วนที่ 3: วันเวลา -->
+        <div class="equip-section">
+          <h4>⏰ วันและเวลาที่ใช้งาน</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>วันที่ต้องการใช้งาน *</label><input type="date" id="bookDate" required onchange="onBookDateChange()"></div>
+            <div class="form-group"><label>จำนวนผู้ใช้ (คน) *</label><input type="number" id="bookUserCount" min="1" placeholder="ระบุจำนวนคน" required></div>
+            <div class="form-group"><label>เวลาเริ่ม * <small style="font-weight:400; color:#718096;">(HH:MM)</small></label><input type="time" id="bookStartTime" required></div>
+            <div class="form-group"><label>เวลาสิ้นสุด * <small style="font-weight:400; color:#718096;">(HH:MM)</small></label><input type="time" id="bookEndTime" required></div>
+          </div>
+          <!-- Room availability panel -->
+          <div class="avail-panel" id="bookAvailPanel">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+              <div style="font-weight:700; font-size:0.88em; color:var(--text);">🔍 ตรวจสอบการจองที่ทับซ้อน</div>
+              <div id="bookAvailBadge"></div>
+            </div>
+            <div id="bookAvailLoading" style="color:#94a3b8; font-size:0.85em;">⏳ กำลังตรวจสอบ...</div>
+            <div id="bookAvailList" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- ส่วนที่ 4: รายละเอียดกิจกรรม + ข้อมูลเอกสาร (รวมกัน) -->
+        <div class="equip-section">
+          <h4>📋 รายละเอียดกิจกรรม</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>ชื่อโครงการ / กิจกรรม *</label>
+              <input type="text" id="bookPurpose" required placeholder="เช่น โครงการค่ายอาสา, งานกีฬาสี">
+            </div>
+            <div class="form-group">
+              <label>วัตถุประสงค์การใช้ห้อง *</label>
+              <input type="text" id="bookPurposeDetail" required placeholder="เช่น ประชุม, ถ่ายทำ, จัดกิจกรรม">
+            </div>
+            <div class="form-group">
+              <label>ชื่อชมรม / หน่วยงานผู้จัด *</label>
+              <input type="text" id="doc_club" placeholder="เช่น สโมสรนักศึกษา คณะศึกษาศาสตร์">
+            </div>
+            <div class="form-group">
+              <label>ปีการศึกษา *</label>
+              <input type="text" id="doc_year" placeholder="เช่น 2567">
+            </div>
+            <div class="form-group">
+              <label>สำหรับ (กลุ่มเป้าหมาย) *</label>
+              <input type="text" id="doc_for" placeholder="เช่น นักศึกษาชั้นปีที่ 1-2">
+            </div>
+            <div class="form-group">
+              <label>ชื่อผู้ประสานงาน *</label>
+              <input type="text" id="doc_contactName" placeholder="ชื่อ-นามสกุล">
+            </div>
+            <div class="form-group">
+              <label>เบอร์โทรผู้ประสานงาน *</label>
+              <input type="text" id="doc_contactTel" placeholder="เช่น 081-234-5678">
+            </div>
+          </div>
+        </div>
+
+        <!-- ส่วนที่ 5: อาจารย์ที่ปรึกษา -->
+        <div class="equip-section">
+          <h4>🎓 อาจารย์ที่ปรึกษา</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>ตำแหน่งทางวิชาการ</label>
+              <select id="doc_proLevel">
+                <option value="">-- เลือกตำแหน่ง --</option>
+                <option value="อ.">อาจารย์ (อ.)</option>
+                <option value="ผศ.">ผู้ช่วยศาสตราจารย์ (ผศ.)</option>
+                <option value="รศ.">รองศาสตราจารย์ (รศ.)</option>
+                <option value="ศ.">ศาสตราจารย์ (ศ.)</option>
+                <option value="ผศ.ดร.">ผู้ช่วยศาสตราจารย์ ดร. (ผศ.ดร.)</option>
+                <option value="รศ.ดร.">รองศาสตราจารย์ ดร. (รศ.ดร.)</option>
+                <option value="ศ.ดร.">ศาสตราจารย์ ดร. (ศ.ดร.)</option>
+                <option value="ดร.">ดร.</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>ชื่อ-นามสกุลอาจารย์ที่ปรึกษา</label>
+              <input type="text" id="doc_proName" placeholder="เช่น สมชาย ใจดี">
+            </div>
+            <div class="form-group">
+              <label>ตำแหน่ง / หน้าที่ในโครงการ</label>
+              <input type="text" id="doc_level" placeholder="เช่น ที่ปรึกษาโครงการ">
+            </div>
+          </div>
+        </div>
+
+        <!-- ส่วนที่ 6: เอกสารประกอบ (toggle) -->
+        <div class="equip-section">
+          <h4 style="margin-bottom:14px;">📄 เอกสารประกอบการขอใช้สถานที่</h4>
+
+          <!-- toggle สร้างเอกสาร -->
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.95em; font-weight:600; color:#1565c0; margin-bottom:14px; background:#eff6ff; padding:10px 16px; border-radius:10px; border:1.5px solid #bfdbfe;">
+            <input type="checkbox" id="wantDoc" onchange="toggleWantDoc()" style="transform:scale(1.3); accent-color:#1565c0;">
+            <span>ต้องการให้ระบบสร้างหนังสือขออนุญาตใช้สถานที่อัตโนมัติ</span>
+          </label>
+
+          <!-- ประเภทเอกสาร (ซ่อนไว้ก่อน) -->
+          <div id="docTypeSection" style="display:none;">
+            <p style="font-size:0.84em; color:#64748b; margin:0 0 10px;">เลือกประเภทของหนังสือขออนุญาต:</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button type="button" id="docBtn0" onclick="selectDocType(0)"
+                style="padding:9px 18px; border-radius:10px; border:2px solid #e2e8f0; background:white; color:#475569; font-size:0.87em; font-weight:600; cursor:pointer; transition:0.2s;">
+                ภายในคณะ
+              </button>
+              <button type="button" id="docBtn1" onclick="selectDocType(1)"
+                style="padding:9px 18px; border-radius:10px; border:2px solid #e2e8f0; background:white; color:#475569; font-size:0.87em; font-weight:600; cursor:pointer; transition:0.2s;">
+                นอกคณะ (ในมหาวิทยาลัย)
+              </button>
+              <button type="button" id="docBtn2" onclick="selectDocType(2)"
+                style="padding:9px 18px; border-radius:10px; border:2px solid #e2e8f0; background:white; color:#475569; font-size:0.87em; font-weight:600; cursor:pointer; transition:0.2s;">
+                นอกมหาวิทยาลัย
+              </button>
+            </div>
+            <div id="docFormFields" style="display:none;"></div>
+
+            <!-- ช่อง "เรียน" — แสดงเฉพาะ นอกคณะ (ในมหาวิทยาลัย) -->
+            <div id="doc_head_wrap" style="display:none; margin-top:14px;">
+              <div class="form-group">
+                <label>📮 เรียน <small style="font-weight:400; color:#64748b;">(ผู้มีอำนาจสูงสุดขององค์กรที่ขออนุญาต)</small></label>
+                <input type="text" id="doc_head" placeholder="เช่น คณบดีคณะวิทยาศาสตร์, ผู้อำนวยการสำนักงาน...">
+              </div>
+            </div>
+          </div><!-- /docTypeSection -->
+        </div><!-- /equip-section doc -->
+
+        <button type="button" class="btn btn-submit" onclick="startBookingFlow()" id="btnStartBooking">📅 ยืนยันการจอง</button>
+      </form>
+    </div>
+
+    <!-- ===== หน้าปฏิทินจองห้อง ===== -->
