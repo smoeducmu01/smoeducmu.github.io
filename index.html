@@ -1,34 +1,281 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-  <link rel="preconnect" href="https://script.google.com">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สโมสรนักศึกษา คณะศึกษาศาสตร์ มช.</title>
+  <meta property="og:title" content="สโมสรนักศึกษา คณะศึกษาศาสตร์ มช.">
+  <meta property="og:description" content="บริการนักศึกษา ยืมอุปกรณ์ จองห้อง สั่งซื้อสินค้า และอื่นๆ">
+  <meta property="og:image" content="https://lh3.googleusercontent.com/u/0/d/1Dh4WcFs9vE_cBag2RpHFupnORc0gg_mX">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <base target="_top">
-  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
-  <?!= include('Styles') ?>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:   #1565c0;
+      --blue2:  #1976d2;
+      --light:  #e3f2fd;
+      --white:  #ffffff;
+      --text:   #0d2340;
+      --muted:  #5d7fa8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Anuphan', sans-serif;
+      background: linear-gradient(145deg, #0d2340 0%, #1565c0 60%, #1976d2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 40px 32px 36px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+      animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .logo {
+      width: 80px; height: 80px; border-radius: 50%;
+      border: 3px solid #e3f2fd;
+      margin: 0 auto 16px;
+      display: block;
+      object-fit: cover;
+    }
+    .org-name {
+      font-size: 1.05em;
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .org-sub {
+      font-size: 0.8em;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    #stateRedirecting { display: none; }
+    #stateInApp       { display: none; }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3.5px solid #e3f2fd;
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 18px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .redirect-text {
+      font-size: 0.9em;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .redirect-text strong { color: var(--blue); }
+    .warning-icon {
+      font-size: 2.8em;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .warning-title {
+      font-size: 1.05em;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .warning-desc {
+      font-size: 0.83em;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+    .steps {
+      background: #f0f7ff;
+      border-radius: 16px;
+      padding: 18px 20px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-size: 0.75em;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-text {
+      font-size: 0.83em;
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .step-text b { color: var(--blue); }
+    .btn-copy {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 20px;
+      font-size: 0.9em;
+      font-weight: 700;
+      font-family: 'Anuphan', sans-serif;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+      margin-bottom: 10px;
+    }
+    .btn-copy:hover  { background: #0d47a1; }
+    .btn-copy:active { transform: scale(0.97); }
+    .btn-copy.copied { background: #2e7d32; }
+    .url-box {
+      background: #f5f8fc;
+      border: 1px solid #d0e4f7;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.72em;
+      color: var(--muted);
+      word-break: break-all;
+      text-align: left;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .hint {
+      font-size: 0.74em;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .divider {
+      height: 1px;
+      background: #eef2f8;
+      margin: 20px 0;
+    }
+    .services {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .svc {
+      background: #f5f8fc;
+      border-radius: 12px;
+      padding: 12px 6px 10px;
+      text-align: center;
+    }
+    .svc-ico { font-size: 1.4em; display: block; margin-bottom: 5px; }
+    .svc-lbl { font-size: 0.7em; color: var(--muted); font-weight: 600; line-height: 1.3; }
+  </style>
 </head>
 <body>
+<div class="card">
 
-  <?!= include('NavBar') ?>
+  <img class="logo"
+    src="https://lh3.googleusercontent.com/u/0/d/1Dh4WcFs9vE_cBag2RpHFupnORc0gg_mX"
+    alt="Logo"
+    onerror="this.style.display='none'">
 
-  <div class="main-content">
-    <?!= include('PageHome') ?>
-    <?!= include('PageOrder') ?>
-    <?!= include('PageTracking') ?>
-    <?!= include('PageInfo') ?>
-    <?!= include('PageServices') ?>
-    <?!= include('PageStudent') ?>
-    <?!= include('PageAdmin') ?>
-    <?!= include('PageAdminExtra') ?>
-  </div><!-- end main-content -->
+  <div class="org-name">สโมสรนักศึกษา คณะศึกษาศาสตร์</div>
+  <div class="org-sub">มหาวิทยาลัยเชียงใหม่</div>
 
-  <?!= include('FooterGlobal') ?>
+  <!-- State 1: กำลัง redirect -->
+  <div id="stateRedirecting">
+    <div class="spinner"></div>
+    <p class="redirect-text">กำลังเปิดระบบ...<br><strong>กรุณารอสักครู่</strong></p>
+  </div>
 
-  <?!= include('JavaScript') ?>
+  <!-- State 2: In-app browser -->
+  <div id="stateInApp">
+    <span class="warning-icon">🌐</span>
+    <div class="warning-title">กรุณาเปิดในเบราว์เซอร์</div>
+    <div class="warning-desc">
+      เบราว์เซอร์ใน Facebook / Instagram<br>ไม่รองรับระบบนี้ครับ
+    </div>
 
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">กดปุ่ม <b>"คัดลอกลิงก์"</b> ด้านล่าง</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">เปิดแอป <b>Safari</b> หรือ <b>Chrome</b> บนมือถือ</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><b>วางลิงก์</b> ในช่อง URL แล้วกด Go</div>
+      </div>
+    </div>
+
+    <button class="btn-copy" id="btnCopy" onclick="copyLink()">📋 คัดลอกลิงก์</button>
+    <div class="url-box" id="urlBox"></div>
+    <div class="hint">💡 หรือกดที่ ··· มุมขวาบน แล้วเลือก "เปิดใน Safari / Chrome"</div>
+
+    <div class="divider"></div>
+
+    <div class="svc-lbl" style="margin-bottom:8px; color:#94a3b8;">บริการในระบบ</div>
+    <div class="services">
+      <div class="svc"><span class="svc-ico">📦</span><span class="svc-lbl">ยืมอุปกรณ์</span></div>
+      <div class="svc"><span class="svc-ico">🏫</span><span class="svc-lbl">จองห้อง</span></div>
+      <div class="svc"><span class="svc-ico">🛍️</span><span class="svc-lbl">สั่งซื้อ</span></div>
+      <div class="svc"><span class="svc-ico">📍</span><span class="svc-lbl">ติดตามสถานะ</span></div>
+      <div class="svc"><span class="svc-ico">📅</span><span class="svc-lbl">ปฏิทิน</span></div>
+      <div class="svc"><span class="svc-ico">📞</span><span class="svc-lbl">ติดต่อ</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  var GAS_URL = "https://script.google.com/macros/s/AKfycbwlQRcISW40I6pd82uRSpIWroO3gm5ROzWuLAhbCpTlS05PFudW6JIE3uak6upEvTRW/exec";
+
+  function isInAppBrowser() {
+    var ua = navigator.userAgent || "";
+    return /FBAN|FBAV|Instagram|FB_IAB|FB4A|FBIOS|MicroMessenger|Line\/|Twitter|Snapchat|TikTok/i.test(ua);
+  }
+
+  function copyLink() {
+    var btn = document.getElementById('btnCopy');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(GAS_URL).then(function() {
+        btn.textContent = '✅ คัดลอกแล้ว!';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = '📋 คัดลอกลิงก์'; btn.classList.remove('copied'); }, 2500);
+      });
+    } else {
+      var el = document.createElement('textarea');
+      el.value = GAS_URL;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      btn.textContent = '✅ คัดลอกแล้ว!';
+      btn.classList.add('copied');
+      setTimeout(function() { btn.textContent = '📋 คัดลอกลิงก์'; btn.classList.remove('copied'); }, 2500);
+    }
+  }
+
+  if (isInAppBrowser()) {
+    document.getElementById('stateInApp').style.display = 'block';
+    document.getElementById('urlBox').textContent = GAS_URL;
+  } else {
+    document.getElementById('stateRedirecting').style.display = 'block';
+    setTimeout(function() { window.location.replace(GAS_URL); }, 800);
+  }
+</script>
 </body>
 </html>
