@@ -1,0 +1,216 @@
+<footer id="globalFooter" style="display:none;">
+
+    <!-- ④ FOOTER -->
+    <div class="hp-footer">
+      <div class="hp-footer-inner">
+        <div>
+        <div class="hp-footer-logo">
+          <img src="https://lh3.googleusercontent.com/u/0/d/1Dh4WcFs9vE_cBag2RpHFupnORc0gg_mX" alt="Logo" onerror="this.style.display='none'">
+          <div><div class="hp-footer-org">สโมสรนักศึกษา คณะศึกษาศาสตร์</div><div class="hp-footer-org-sub">มหาวิทยาลัยเชียงใหม่</div></div>
+        </div>
+        <ul class="hp-footer-info">
+          <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7ec4e0" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> คณะศึกษาศาสตร์ มหาวิทยาลัยเชียงใหม่ ถ.สุเทพ ต.สุเทพ อ.เมือง จ.เชียงใหม่ 50200</li>
+          <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7ec4e0" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a2 2 0 011.72-2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 15.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg> 053-944-xxx</li>
+        </ul>
+        <div class="hp-footer-socials">
+          <a class="hp-footer-social-btn" href="https://www.facebook.com/smoeducmu" target="_blank"><svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a>
+          <a class="hp-footer-social-btn" href="#" target="_blank"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20.06 12 20.06 12 20.06s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white" stroke="none"/></svg></a>
+        </div>
+        </div>
+        <div>
+        <div class="hp-footer-col-title">บริการมหาวิทยาลัย</div>
+        <ul class="hp-footer-links">
+          <li onclick="window.open('https://www.cmu.ac.th','_blank')">เว็บไซต์มหาวิทยาลัยเชียงใหม่</li>
+          <li onclick="window.open('https://www1.reg.cmu.ac.th','_blank')">CMU Registrar</li>
+          <li onclick="window.open('https://mail.cmu.ac.th','_blank')">CMU Mail</li>
+          <li onclick="window.open('https://mis.cmu.ac.th','_blank')">CMU MIS</li>
+          <li onclick="window.open('https://sis.cmu.ac.th','_blank')">CMU SIS</li>
+        </ul>
+        </div>
+        <div>
+        <div class="hp-footer-col-title">บริการของสโมสร</div>
+        <ul class="hp-footer-links">
+          <li onclick="window.open('https://www.edu.cmu.ac.th','_blank')">เว็บไซต์คณะศึกษาศาสตร์</li>
+          <li onclick="showPage('order', document.getElementById('menu-order'))">ร้านค้าสโมสร</li>
+          <li onclick="showPage('equipment', document.getElementById('menu-equipment'))">ยืม-คืนอุปกรณ์</li>
+          <li onclick="showPage('booking', document.getElementById('menu-booking'))">จองห้องประชุม</li>
+          <li onclick="showPage('clubs', document.getElementById('menu-clubs'))">ลงทะเบียนชุมนุม</li>
+        </ul>
+        </div>
+      </div>
+      <div class="hp-footer-bottom">© 2568 สโมสรนักศึกษา คณะศึกษาศาสตร์ มหาวิทยาลัยเชียงใหม่ — พัฒนาโดย Media EDU Club System</div>
+    </div>
+  </footer>
+
+  <!-- ===== Modals ===== -->
+
+  <!-- Modal: Equipment Catalog -->
+  <!-- ===== Admin QR Code Modal ===== -->
+  <div id="adminQrModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.65); z-index:4000; align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(3px);">
+    <div style="background:white; border-radius:20px; width:100%; max-width:360px; box-shadow:0 24px 60px rgba(0,0,0,0.25); overflow:hidden;">
+      <div style="background:linear-gradient(120deg,#1a3a6b,#6d28d9); padding:18px 20px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="color:white; font-weight:700; font-size:1em;">🔲 QR Code ยืนยันอุปกรณ์</div>
+          <div id="adminQrModalSub" style="color:rgba(255,255,255,0.75); font-size:0.8em; margin-top:2px;"></div>
+        </div>
+        <button onclick="document.getElementById('adminQrModal').style.display='none'" style="background:rgba(255,255,255,0.2); border:none; color:white; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:1em; line-height:1;">✕</button>
+      </div>
+      <div style="padding:20px; text-align:center;">
+        <img id="adminQrCanvas" style="border-radius:10px; border:1.5px solid #e2e8f0; margin-bottom:10px; width:180px; height:180px; display:block;" alt="QR Code">
+        <div id="adminQrId" style="font-family:monospace; font-size:0.88em; background:#f5f3ff; color:#6d28d9; padding:4px 14px; border-radius:8px; display:inline-block; margin-bottom:14px;"></div>
+        <div id="adminQrInfo" style="font-size:0.82em; color:#475569; line-height:1.6; margin-bottom:16px;"></div>
+        <div style="display:flex; gap:8px; justify-content:center;">
+          <button onclick="printAdminQr()" style="background:#f5f3ff; color:#6d28d9; border:1.5px solid #ddd6fe; border-radius:10px; padding:9px 20px; cursor:pointer; font-size:0.88em; font-weight:700; font-family:inherit;">🖨️ พิมพ์ QR</button>
+          <button onclick="document.getElementById('adminQrModal').style.display='none'" style="background:#f1f5f9; color:#475569; border:none; border-radius:10px; padding:9px 20px; cursor:pointer; font-size:0.88em; font-family:inherit;">ปิด</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="equipCatalogModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:3000; align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(3px);">
+    <div style="background:white; border-radius:22px; width:100%; max-width:780px; max-height:90vh; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 32px 80px rgba(0,0,0,0.28);">
+
+      <!-- Header -->
+      <div style="background:linear-gradient(130deg,#0f2057,#1565c0); color:white; padding:22px 26px 18px; border-radius:22px 22px 0 0;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+          <div>
+            <div style="font-size:1.15em; font-weight:800; letter-spacing:-0.01em;">📋 รายการอุปกรณ์ให้ยืม</div>
+            <div style="font-size:0.8em; opacity:0.75; margin-top:3px;">เฉพาะอุปกรณ์สถานะพร้อมใช้งาน</div>
+          </div>
+          <button onclick="closeEquipCatalog()" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:white; border-radius:10px; padding:7px 15px; cursor:pointer; font-size:0.85em; font-weight:700; transition:0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">✕ ปิด</button>
+        </div>
+        <!-- Search -->
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="position:relative; flex:1;">
+            <span style="position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:0.9em; opacity:0.7;">🔍</span>
+            <input id="catalogSearch" type="text" placeholder="ค้นหาชื่ออุปกรณ์..."
+              style="width:100%; box-sizing:border-box; padding:9px 12px 9px 34px; border-radius:10px; border:none; background:rgba(255,255,255,0.18); color:white; font-size:0.88em; outline:none;"
+              onfocus="this.style.background='rgba(255,255,255,0.28)'" onblur="this.style.background='rgba(255,255,255,0.18)'"
+              onkeydown="if(event.key==='Enter') filterCatalog()">
+          </div>
+          <button onclick="filterCatalog()"
+            style="background:rgba(255,255,255,0.22); border:1.5px solid rgba(255,255,255,0.5); color:white; border-radius:10px; padding:9px 16px; cursor:pointer; font-size:0.85em; font-weight:700; white-space:nowrap; flex-shrink:0;"
+            onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.22)'">
+            ค้นหา
+          </button>
+          <button onclick="resetCatalogSearch()"
+            style="background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.3); color:rgba(255,255,255,0.8); border-radius:10px; padding:9px 14px; cursor:pointer; font-size:0.85em; white-space:nowrap; flex-shrink:0;"
+            onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+            ✕ ล้าง
+          </button>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div id="equipCatalogBody" style="overflow-y:auto; padding:20px 24px 24px; flex:1; background:#f8fafc;">
+        <p style="text-align:center; color:#94a3b8; padding:40px 0;">⏳ กำลังโหลด...</p>
+      </div>
+    </div>
+  </div>
+  <div id="productDetailModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-btn" onclick="document.getElementById('productDetailModal').style.display='none'">✖</button>
+      <div id="modalProductBadges" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;"></div>
+      <h3 id="modalProductName" style="margin-top:0;"></h3>
+      <div id="modalImages" style="display:flex; overflow-x:auto; gap:10px; margin-bottom:15px; padding-bottom:5px;"></div>
+      <h4 style="color:var(--primary-blue); margin-top:0;">ราคา: <span id="modalProductPrice">0</span> ฿</h4>
+      <div id="modalProductDesc" style="white-space:pre-wrap; font-size:0.95em; margin-bottom:15px; color:#475569;"></div>
+      <div id="modalSizesContainer" class="size-dropdown-container" style="display:none;"></div>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <label style="font-size:0.88em; color:#475569;">จำนวน:</label>
+        <button onclick="changeModalQty(-1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #c7d2fe; background:#eff6ff; cursor:pointer; font-size:1.1em; font-weight:700;">−</button>
+        <span id="modalQty" style="min-width:28px; text-align:center; font-weight:700; font-size:1em;">1</span>
+        <button onclick="changeModalQty(1)"  style="width:32px; height:32px; border-radius:8px; border:1px solid #c7d2fe; background:#eff6ff; cursor:pointer; font-size:1.1em; font-weight:700;">+</button>
+      </div>
+      <input type="hidden" id="modalActiveProductId">
+      <button class="btn btn-submit" id="btnAddFromModal" onclick="addFromModal()">🛒 เพิ่มลงตะกร้า</button>
+    </div>
+  </div>
+
+  <!-- ===== Modal ชำระเงิน ===== -->
+  <div id="paymentModal" class="modal-overlay">
+    <div class="modal-content" style="max-width:480px;">
+      <button class="close-btn" onclick="document.getElementById('paymentModal').style.display='none'">✖</button>
+      <h3 style="margin-top:0; color:var(--dark-blue);">💳 ชำระเงิน</h3>
+      <div id="paymentOrderSummary" style="background:#f8faff; border:1px solid #e0e7ff; border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:0.88em; line-height:1.7;"></div>
+      <div id="paymentQrSection"></div>
+
+      <!-- อัปโหลดสลิป -->
+      <div style="margin-top:16px;">
+        <label style="font-weight:700; color:var(--dark-blue); display:block; margin-bottom:6px;">📎 แนบสลิปโอนเงิน *</label>
+        <div id="slipDropZone" style="border:2px dashed #93c5fd; border-radius:12px; padding:20px; text-align:center; cursor:pointer; background:#f0f7ff; transition:0.2s;"
+          onclick="document.getElementById('slipFileInput').click()"
+          ondragover="event.preventDefault(); this.style.background='#dbeafe';"
+          ondragleave="this.style.background='#f0f7ff';"
+          ondrop="handleSlipDrop(event)">
+          <div style="font-size:2em; margin-bottom:6px;">📤</div>
+          <div style="font-size:0.88em; color:#475569;">คลิกหรือลากไฟล์สลิปมาวางที่นี่</div>
+          <div style="font-size:0.78em; color:#94a3b8; margin-top:4px;">JPG, PNG, PDF (ไม่เกิน 5MB)</div>
+        </div>
+        <input type="file" id="slipFileInput" accept="image/*,application/pdf" style="display:none" onchange="handleSlipFileSelect(this)">
+        <div id="slipPreviewWrap" style="display:none; margin-top:10px; text-align:center;">
+          <img id="slipPreviewImg" style="max-height:160px; border-radius:8px; border:1px solid #e0e7ff; margin-bottom:6px;">
+          <div style="font-size:0.82em; color:#475569;" id="slipFileName"></div>
+          <button onclick="clearSlip()" style="font-size:0.78em; color:#ef4444; background:none; border:none; cursor:pointer; margin-top:4px;">✕ ลบรูป</button>
+        </div>
+      </div>
+      <button id="btnConfirmPayment" class="btn btn-submit" style="margin-top:16px;" onclick="confirmPaymentAndOrder()">✅ ยืนยันการสั่งซื้อ</button>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 600px;">
+      <button class="close-btn" onclick="document.getElementById('confirmModal').style.display='none'">✖</button>
+      <h3 style="margin-top: 0; color: var(--dark-blue); border-bottom: 2px solid var(--accent-cyan); padding-bottom: 10px;">📋 ตรวจสอบข้อมูลก่อนยืนยัน</h3>
+      <div id="confirmDetailsContent" style="font-size: 0.95em; line-height: 1.8; margin-top: 15px; background: #f9fbfd; padding: 15px; border-radius: 8px; border: 1px solid #e0e7ff; max-height: 50vh; overflow-y: auto;"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-details" onclick="document.getElementById('confirmModal').style.display='none'">แก้ไขข้อมูล</button>
+        <button class="btn btn-submit" style="margin-top: 0;" onclick="proceedToTerms()">✅ ยืนยันข้อมูลถูกต้อง</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="termsModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 style="margin-top: 0;">📜 เงื่อนไขการยืมอุปกรณ์</h3>
+      <div class="terms-box" id="termsScroll">
+        <p><b>ข้อ 1.</b> ผู้ยืมจะต้องรับผิดชอบในการดูแลรักษาอุปกรณ์ให้อยู่ในสภาพสมบูรณ์ตลอดระยะเวลาที่ยืม จนกว่าจะมีการส่งมอบคืนแก่เจ้าหน้าที่อย่างครบถ้วน</p>
+        <p><b>ข้อ 2.</b> ในกรณีที่อุปกรณ์เกิดการชำรุด เสียหาย หรือสูญหาย ไม่ว่าในกรณีใด ๆ ผู้ยืมยินยอมที่จะรับผิดชอบชดใช้ค่าเสียหายตามมูลค่าจริงของอุปกรณ์นั้น ๆ ทุกประการ</p>
+        <p><b>ข้อ 3.</b> ผู้ยืมจะต้องส่งคืนอุปกรณ์ตามวันและเวลาที่ได้ระบุไว้ในคำร้อง หากมีการส่งคืนล่าช้ากว่ากำหนด ผู้ยืมอาจถูกพิจารณาระงับสิทธิ์ในการยืมอุปกรณ์ในครั้งต่อไป</p>
+        <p><b>ข้อ 4.</b> ไม่อนุญาตให้ผู้ยืมนำอุปกรณ์ไปให้บุคคลอื่นยืมช่วงต่อ หรือนำไปใช้งานผิดวัตถุประสงค์ที่ได้แจ้งไว้โดยเด็ดขาด</p>
+        <p><b>ข้อ 5.</b> ผู้ยืมมีหน้าที่ตรวจสอบความเรียบร้อยและสภาพการใช้งานของอุปกรณ์ร่วมกับเจ้าหน้าที่ทุกครั้งก่อนรับมอบอุปกรณ์</p>
+        <hr style="border-top: 1px dashed #ccc; margin: 15px 0;">
+        <p style="color: #d32f2f; font-size: 0.9em;"><i>* โปรดเลื่อนอ่านข้อความทั้งหมดจนสุด เพื่อให้ปุ่มยอมรับเงื่อนไขสามารถใช้งานได้</i></p>
+      </div>
+      <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: bold;">
+        <input type="checkbox" id="termsCheck" style="transform: scale(1.3);" disabled onchange="checkTermsReady()">
+        ข้าพเจ้าได้อ่านและยอมรับเงื่อนไขทั้งหมดแล้ว
+      </label>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-details" onclick="document.getElementById('termsModal').style.display='none'">ยกเลิก</button>
+        <button class="btn btn-submit" id="btnAcceptTerms" style="margin-top: 0;" disabled onclick="openEvidenceModal()">ดำเนินการแนบรูป/วิดีโอ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="evidenceModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 style="margin-top: 0;">📸 แนบรูป/วิดีโอ หลักฐาน</h3>
+      <div class="form-group" style="margin-bottom: 15px;"><label>รูปภาพ (บังคับ)</label><input type="file" id="evidencePhoto" accept="image/*" multiple></div>
+      <div class="form-group" style="margin-bottom: 15px;"><label>วิดีโอ (ถ้ามี)</label><input type="file" id="evidenceVideo" accept="video/*"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-details" onclick="document.getElementById('evidenceModal').style.display='none'; document.getElementById('termsModal').style.display='flex';">ย้อนกลับ</button>
+        <button class="btn btn-submit" id="btnFinalSubmit" style="margin-top: 0;" onclick="finalSubmitRequest()">🚀 ยืนยันส่งคำขอยืม</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="calendarDetailModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-btn" onclick="document.getElementById('calendarDetailModal').style.display='none'">✖</button>
+      <h3 style="margin-top: 0; color: var(--dark-blue); border-bottom: 2px solid var(--accent-cyan); padding-bottom: 10px;">📋 รายละเอียดการจอง</h3>
+      <div id="calendarDetailContent" style="font-size: 0.95em; line-height: 1.8; margin-top: 15px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== หน้าตั้งค่า Faculty API ===== -->
