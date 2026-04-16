@@ -1,0 +1,240 @@
+<nav class="topnav" id="topNav">
+    <div class="topnav-inner">
+
+      <!-- Brand -->
+      <div class="topnav-brand" onclick="showPage('home', document.getElementById('menu-home'))">
+        <img src="https://lh3.googleusercontent.com/u/0/d/1Dh4WcFs9vE_cBag2RpHFupnORc0gg_mX" alt="Logo" class="topnav-logo" onerror="this.style.display='none'">
+        <div class="topnav-brand-text">
+          <div class="topnav-title">สโมสรนักศึกษา คณะศึกษาศาสตร์</div>
+          <div class="topnav-sub">คณะศึกษาศาสตร์ มหาวิทยาลัยเชียงใหม่</div>
+        </div>
+      </div>
+
+      <!-- Desktop Nav -->
+      <div class="topnav-nav-strip" id="topnavLinks">
+
+        <!-- หน้าหลัก — icon only -->
+        <div class="menu-item active" id="menu-home" onclick="showPage('home', this);" title="หน้าหลัก">
+          <span class="menu-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        </div>
+
+        <!-- ลงทะเบียน -->
+        <div class="menu-item" id="menu-clubs" data-system="clubs" onclick="showPage('clubs', this);">
+          <span class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
+          <span class="nav-label">ลงทะเบียน</span>
+        </div>
+
+        <!-- สั่งซื้อสินค้า -->
+        <div class="menu-item" id="menu-order" onclick="showPage('order', this);">
+          <span class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></span>
+          <span class="nav-label">สั่งซื้อสินค้า</span>
+        </div>
+
+        <!-- ติดตามสถานะ -->
+        <div class="menu-item" id="menu-tracking" onclick="showPage('tracking', this);">
+          <span class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <span class="nav-label">ติดตามสถานะ</span>
+        </div>
+
+        <!-- บริการนักศึกษา (dropdown) -->
+        <div class="has-dropdown">
+          <div class="menu-item" id="menu-services" onclick="toggleDropdown(this)">
+            <span class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+            <span class="nav-label">บริการนักศึกษา</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="#3d88b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="nav-dropdown">
+            <div class="dd-item" id="menu-equipment" onclick="showPage('equipment', this);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+              ยืมอุปกรณ์
+            </div>
+            <div class="dd-item" id="menu-booking" onclick="showPage('booking', this);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              จองห้อง
+            </div>
+            <div class="dd-item" id="menu-calendar" onclick="showPage('calendar', this); loadCalendarData();">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              ตารางจองห้อง
+            </div>
+          </div>
+        </div>
+
+        <!-- ทำเนียบองค์กร -->
+        <div class="menu-item" id="menu-org-directory" onclick="showPage('org-directory', this); loadOrgDirectory();">
+          <span class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>
+          <span class="nav-label">ทำเนียบองค์กร</span>
+        </div>
+
+        <!-- ปฏิทินกิจกรรม -->
+        <div class="menu-item" id="menu-acal-main" data-system="activityCalendar" onclick="showPage('activity-calendar', this); loadActivityCalendar();">
+          <span class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
+          <span class="nav-label">ปฏิทินกิจกรรม</span>
+        </div>
+
+        <!-- ติดต่อ (dropdown) -->
+        <div class="has-dropdown">
+          <div class="menu-item" id="menu-contact-parent" onclick="toggleDropdown(this)">
+            <span class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a2 2 0 011.72-2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 15.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span>
+            <span class="nav-label">ติดต่อ</span>
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="#3d88b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="nav-dropdown">
+            <div class="dd-item" id="menu-faq" onclick="showPage('faq', this);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Q&A
+            </div>
+            <div class="dd-item" id="menu-contact" onclick="showPage('contact', this);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              ติดต่อทีมงาน
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin pill -->
+        <div class="menu-item topnav-admin" id="menu-admin-login" onclick="showPage('admin-login', this);">
+          <span class="menu-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg></span>
+          <span class="nav-label">Admin</span>
+        </div>
+
+      </div>
+
+      <!-- Hamburger (mobile) -->
+      <button class="topnav-hamburger-btn" id="topnavHamburger" onclick="toggleMobileMenu()" aria-label="เมนู">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div><!-- end topnav-inner -->
+  </nav>
+  <!-- Mobile overlay -->
+  <div class="topnav-mob-overlay" id="mobOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- Mobile dropdown menu -->
+  <div class="topnav-mobile-dropdown" id="mobDropdown">
+
+    <!-- หน้าหลัก -->
+    <div class="mob-item" onclick="mobNav('home')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      หน้าหลัก
+    </div>
+
+    <!-- ลงทะเบียน -->
+    <div class="mob-item" onclick="mobNav('clubs')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      ลงทะเบียน
+    </div>
+
+    <!-- สั่งซื้อสินค้า -->
+    <div class="mob-item" onclick="mobNav('order')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      สั่งซื้อสินค้า
+    </div>
+
+    <!-- ติดตามสถานะ -->
+    <div class="mob-item" onclick="mobNav('tracking')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      ติดตามสถานะ
+    </div>
+
+    <!-- บริการนักศึกษา (sub-group) -->
+    <div class="mob-item" style="background:#f5fafd; color:#2a6496; font-size:0.75em; padding:8px 20px; pointer-events:none; border-bottom:none;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3d88b8" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>
+      บริการนักศึกษา
+    </div>
+    <div class="mob-item" style="padding-left:36px;" onclick="mobNav('equipment')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      ยืมอุปกรณ์
+    </div>
+    <div class="mob-item" style="padding-left:36px;" onclick="mobNav('booking')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      จองห้อง
+    </div>
+    <div class="mob-item" style="padding-left:36px;" onclick="mobNav('calendar', true)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      ตารางจองห้อง
+    </div>
+
+    <!-- ทำเนียบองค์กร -->
+    <div class="mob-item" onclick="closeMobileMenu(); showPage('org-directory', document.getElementById('menu-org-directory')); loadOrgDirectory()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+      ทำเนียบองค์กร
+    </div>
+
+    <!-- ปฏิทินกิจกรรม -->
+    <div class="mob-item" onclick="mobNavAcal()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+      ปฏิทินกิจกรรม
+    </div>
+
+    <!-- ติดต่อ (sub-group) -->
+    <div class="mob-item" style="background:#f5fafd; color:#2a6496; font-size:0.75em; padding:8px 20px; pointer-events:none; border-bottom:none;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3d88b8" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07"/></svg>
+      ติดต่อ
+    </div>
+    <div class="mob-item" style="padding-left:36px;" onclick="mobNav('faq')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/></svg>
+      Q&A
+    </div>
+    <div class="mob-item" style="padding-left:36px;" onclick="mobNav('contact')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      ติดต่อทีมงาน
+    </div>
+
+    <!-- Admin -->
+    <div class="mob-item admin-item" onclick="mobNav('admin-login')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+      สำหรับ Admin
+    </div>
+
+  </div>
+
+  <script>
+  // ── Dropdown click logic ──
+  function toggleDropdown(el) {
+    var parent = el.closest('.has-dropdown');
+    if (!parent) return;
+    var isOpen = parent.classList.contains('open');
+    // Close all first
+    document.querySelectorAll('.has-dropdown.open').forEach(function(d) {
+      d.classList.remove('open');
+    });
+    // Toggle this one
+    if (!isOpen) parent.classList.add('open');
+  }
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.has-dropdown')) {
+      document.querySelectorAll('.has-dropdown.open').forEach(function(d) {
+        d.classList.remove('open');
+      });
+    }
+  });
+
+  function toggleMobileMenu() {
+    var btn = document.getElementById('topnavHamburger');
+    var menu = document.getElementById('mobDropdown');
+    var overlay = document.getElementById('mobOverlay');
+    var isOpen = menu.classList.contains('open');
+    if (isOpen) { closeMobileMenu(); }
+    else {
+      btn.classList.add('open');
+      menu.classList.add('open');
+      overlay.classList.add('open');
+    }
+  }
+  function closeMobileMenu() {
+    document.getElementById('topnavHamburger').classList.remove('open');
+    document.getElementById('mobDropdown').classList.remove('open');
+    document.getElementById('mobOverlay').classList.remove('open');
+  }
+  function mobNav(page, loadCal) {
+    closeMobileMenu();
+    var menuEl = document.getElementById('menu-' + page);
+    showPage(page, menuEl || document.getElementById('menu-home'));
+    if (loadCal) loadCalendarData();
+  }
+  function mobNavAcal() {
+    closeMobileMenu();
+    showPage('activity-calendar', document.getElementById('menu-activity-calendar'));
+    loadActivityCalendar();
+  }
+  </script>
