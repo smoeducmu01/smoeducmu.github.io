@@ -1,0 +1,69 @@
+<div id="page-tracking" class="card">
+      <div class="equip-hero" style="background: linear-gradient(120deg, #1a3a6b 0%, #1565c0 100%);">
+        <div>
+          <h2 style="margin:0 0 4px;">📦 ติดตามสถานะ</h2>
+          <p style="margin:0; opacity:0.85; font-size:0.88em;">ค้นหาด้วย ชื่อ / เบอร์โทร / รหัสนักศึกษา / รหัสรายการ</p>
+        </div>
+      </div>
+
+      <!-- Search Box -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="flex:1; position:relative;">
+            <input type="text" id="searchTrackInput"
+              placeholder="ค้นหา... ชื่อ, เบอร์, รหัสนักศึกษา, รหัสรายการ"
+              oninput="onTrackInput()"
+              onkeydown="if(event.key==='Enter') searchTracking()"
+              style="width:100%; margin:0; padding-right:36px;">
+            <button id="btnClearTrack" onclick="clearTrackSearch()"
+              style="display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%);
+              background:none; border:none; cursor:pointer; font-size:1em; color:#94a3b8; padding:0; line-height:1;">✕</button>
+          </div>
+          <button class="btn btn-submit" onclick="searchTracking()" id="btnDoSearch"
+            style="width:auto; padding:0 20px; margin:0; flex-shrink:0;">ค้นหา</button>
+        </div>
+
+        <!-- Recent searches -->
+        <div id="recentSearches" style="margin-top:8px; display:none;">
+          <div style="font-size:0.75em; color:#94a3b8; margin-bottom:5px;">🕐 ค้นหาล่าสุด</div>
+          <div id="recentChips" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+      <!-- Type filter chips -->
+      <div id="trackTypeFilter" style="display:flex; gap:7px; flex-wrap:wrap; margin-bottom:14px;">
+        <button class="track-type-chip active" data-type="all"       onclick="selectTrackType('all',this)"><i class="fas fa-clipboard"></i> ทั้งหมด</button>
+        <button class="track-type-chip"        data-type="order"     onclick="selectTrackType('order',this)"><i class="fas fa-box"></i> ออเดอร์</button>
+        <button class="track-type-chip"        data-type="equipment" onclick="selectTrackType('equipment',this)"><i class="fas fa-laptop"></i> ยืมอุปกรณ์</button>
+        <button class="track-type-chip"        data-type="booking"   onclick="selectTrackType('booking',this)"><i class="fas fa-school"></i> จองห้อง</button>
+        <button class="track-type-chip"        data-type="jersey"    onclick="selectTrackType('jersey',this)" style="border-color:#86efac; color:#15803d;"><i class="fas fa-shirt"></i> EDUJERSEY</button>
+        
+        <button class="track-type-chip"        data-type="delivery"  onclick="selectTrackType('delivery',this)" style="border-color:#fca5a5; color:#b91c1c;"><i class="fas fa-truck-fast"></i> การจัดส่ง</button>
+      </div>
+
+      <!-- Status bar filter (shown after search) -->
+      <div id="trackingFilterArea" style="display:none;">
+        <div class="track-status-bar">
+          <div class="tsb-item active" id="tsb-all"    onclick="filterTracking('all',this)"    data-group="all">
+            <span class="tsb-icon">📋</span><span class="tsb-count" id="tcnt-all">0</span><span class="tsb-label">ทั้งหมด</span>
+          </div>
+          <div class="tsb-item" id="tsb-pending"  onclick="filterTracking('pending',this)"  data-group="pending">
+            <span class="tsb-icon">🕐</span><span class="tsb-count" id="tcnt-pending">0</span><span class="tsb-label">รออนุมัติ</span>
+          </div>
+          <div class="tsb-item" id="tsb-active"   onclick="filterTracking('active',this)"   data-group="active">
+            <span class="tsb-icon">✅</span><span class="tsb-count" id="tcnt-active">0</span><span class="tsb-label">ดำเนินการ</span>
+          </div>
+          <div class="tsb-item" id="tsb-done"     onclick="filterTracking('done',this)"     data-group="done">
+            <span class="tsb-icon">🎉</span><span class="tsb-count" id="tcnt-done">0</span><span class="tsb-label">เสร็จสิ้น</span>
+          </div>
+          <div class="tsb-item" id="tsb-cancel"   onclick="filterTracking('cancel',this)"   data-group="cancel">
+            <span class="tsb-icon">❌</span><span class="tsb-count" id="tcnt-cancel">0</span><span class="tsb-label">ยกเลิก</span>
+          </div>
+        </div>
+        <div class="track-count-label" id="trackCountLabel"></div>
+      </div>
+
+      <div id="trackingResult" style="margin-top:6px;"></div>
+    </div>
+
+    <!-- ===== หน้า FAQ ===== -->
